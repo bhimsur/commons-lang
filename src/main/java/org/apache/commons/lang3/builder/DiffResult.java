@@ -60,9 +60,9 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
      * </p>
      *
      * @param lhs
-     *            the left hand object
+     *            the left-hand object
      * @param rhs
-     *            the right hand object
+     *            the right-hand object
      * @param diffList
      *            the list of differences, may be empty
      * @param style
@@ -197,13 +197,12 @@ public class DiffResult<T> implements Iterable<Diff<?>> {
         final ToStringBuilder lhsBuilder = new ToStringBuilder(lhs, style);
         final ToStringBuilder rhsBuilder = new ToStringBuilder(rhs, style);
 
-        for (final Diff<?> diff : diffList) {
+        diffList.forEach(diff -> {
             lhsBuilder.append(diff.getFieldName(), diff.getLeft());
             rhsBuilder.append(diff.getFieldName(), diff.getRight());
-        }
+        });
 
-        return String.format("%s %s %s", lhsBuilder.build(), DIFFERS_STRING,
-                rhsBuilder.build());
+        return String.format("%s %s %s", lhsBuilder.build(), DIFFERS_STRING, rhsBuilder.build());
     }
 
     /**

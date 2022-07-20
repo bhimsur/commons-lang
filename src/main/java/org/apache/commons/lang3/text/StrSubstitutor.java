@@ -240,7 +240,7 @@ public class StrSubstitutor {
         final Map<String, String> valueMap = new HashMap<>();
         final Enumeration<?> propNames = valueProperties.propertyNames();
         while (propNames.hasMoreElements()) {
-            final String propName = (String) propNames.nextElement();
+            final String propName = String.valueOf(propNames.nextElement());
             final String propValue = valueProperties.getProperty(propName);
             valueMap.put(propName, propValue);
         }
@@ -765,7 +765,7 @@ public class StrSubstitutor {
     /**
      * Recursive handler for multiple levels of interpolation. This is the main
      * interpolation method, which resolves the values of all variable references
-     * contained in the passed in text.
+     * contained in the passed-in text.
      *
      * @param buf  the string builder to substitute into, not null
      * @param offset  the start offset within the builder, must be valid

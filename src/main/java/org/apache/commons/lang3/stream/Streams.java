@@ -19,9 +19,12 @@ package org.apache.commons.lang3.stream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators.AbstractSpliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
@@ -31,6 +34,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.function.Failable;
@@ -119,6 +123,47 @@ public class Streams {
         @Override
         public Supplier<List<E>> supplier() {
             return ArrayList::new;
+        }
+    }
+
+    /**
+     * Helps implement {@link Streams#of(Enumeration)}.
+     *
+     * @param <T> The element type.
+     */
+    private static class EnumerationSpliterator<T> extends AbstractSpliterator<T> {
+
+        private final Enumeration<T> enumeration;
+
+        /**
+         * Creates a spliterator reporting the given estimated size and additionalCharacteristics.
+         *
+         * @param estimatedSize the estimated size of this spliterator if known, otherwise {@code Long.MAX_VALUE}.
+         * @param additionalCharacteristics properties of this spliterator's source or elements. If {@code SIZED} is reported then this spliterator will
+         *        additionally report {@code SUBSIZED}.
+         * @param enumeration The Enumeration to wrap.
+         */
+        protected EnumerationSpliterator(final long estimatedSize, final int additionalCharacteristics, final Enumeration<T> enumeration) {
+            super(estimatedSize, additionalCharacteristics);
+            this.enumeration = Objects.requireNonNull(enumeration, "enumeration");
+        }
+
+        @Override
+        public void forEachRemaining(final Consumer<? super T> action) {
+            while (enumeration.hasMoreElements()) {
+                next(action);
+            }
+        }
+
+        private boolean next(final Consumer<? super T> action) {
+            action.accept(enumeration.nextElement());
+            return true;
+
+        }
+
+        @Override
+        public boolean tryAdvance(final Consumer<? super T> action) {
+            return enumeration.hasMoreElements() ? next(action) : false;
         }
     }
 
@@ -485,7 +530,7 @@ public class Streams {
      * @since 3.13.0
      */
     public static <T> FailableStream<T> failableStream(final Collection<T> stream) {
-        return failableStream(toStream(stream));
+        return failableStream(of(stream));
     }
 
     /**
@@ -533,7 +578,7 @@ public class Streams {
     }
 
     private static <E> Stream<E> filter(final Collection<E> collection, final Predicate<? super E> predicate) {
-        return toStream(collection).filter(predicate);
+        return of(collection).filter(predicate);
     }
 
     /**
@@ -552,7 +597,7 @@ public class Streams {
      * @since 3.13.0
      */
     public static <E> Stream<E> instancesOf(final Class<? super E> clazz, final Collection<? super E> collection) {
-        return instancesOf(clazz, toStream(collection));
+        return instancesOf(clazz, of(collection));
     }
 
     @SuppressWarnings("unchecked") // After the isInstance check, we still need to type-cast.
@@ -561,15 +606,51 @@ public class Streams {
     }
 
     /**
-     * Streams non-null elements of a collection.
+     * Streams the non-null elements of a collection.
      *
      * @param <E> the type of elements in the collection.
      * @param collection the collection to stream or null.
      * @return A non-null stream that filters out null elements.
      * @since 3.13.0
      */
-    public static <E> Stream<E> nullSafeStream(final Collection<E> collection) {
+    public static <E> Stream<E> nonNull(final Collection<E> collection) {
         return filter(collection, Objects::nonNull);
+    }
+
+    /**
+     * Delegates to {@link Collection#stream()} or returns {@link Stream#empty()} if the collection is null.
+     *
+     * @param <E> the type of elements in the collection.
+     * @param collection the collection to stream or null.
+     * @return {@link Collection#stream()} or {@link Stream#empty()} if the collection is null.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Collection<E> collection) {
+        return collection == null ? Stream.empty() : collection.stream();
+    }
+
+    /**
+     * Streams the elements of the given enumeration in order.
+     *
+     * @param <E> The enumeration element type.
+     * @param enumeration The enumeration to stream.
+     * @return a new stream.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Enumeration<E> enumeration) {
+        return StreamSupport.stream(new EnumerationSpliterator<>(Long.MAX_VALUE, Spliterator.ORDERED, enumeration), false);
+    }
+
+    /**
+     * Creates a stream on the given Iterable.
+     *
+     * @param <E> the type of elements in the Iterable.
+     * @param iterable the Iterable to stream or null.
+     * @return a new Stream or {@link Stream#empty()} if the Iterable is null.
+     * @since 3.13.0
+     */
+    public static <E> Stream<E> of(final Iterable<E> iterable) {
+        return iterable == null ? Stream.empty() : StreamSupport.stream(iterable.spliterator(), false);
     }
 
     /**
@@ -684,17 +765,5 @@ public class Streams {
      */
     public static <T extends Object> Collector<T, ?, T[]> toArray(final Class<T> pElementType) {
         return new ArrayCollector<>(pElementType);
-    }
-
-    /**
-     * Delegates to {@link Collection#stream()} or returns {@link Stream#empty()} if the collection is null.
-     *
-     * @param <E> the type of elements in the collection.
-     * @param collection the collection to stream or null.
-     * @return {@link Collection#stream()} or {@link Stream#empty()} if the collection is null.
-     * @since 3.13.0
-     */
-    public static <E> Stream<E> toStream(final Collection<E> collection) {
-        return collection == null ? Stream.empty() : collection.stream();
     }
 }

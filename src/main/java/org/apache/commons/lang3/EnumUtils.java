@@ -136,7 +136,7 @@ public class EnumUtils {
      * @param values    the values we want to convert, not {@code null}, neither containing {@code null}
      * @param <E>       the type of the enumeration
      * @return a long[] whose values provide a binary representation of the given set of enum values
-     *         with least significant digits rightmost.
+     *         with the least significant digits rightmost.
      * @throws NullPointerException if {@code enumClass} or {@code values} is {@code null}
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
@@ -166,7 +166,7 @@ public class EnumUtils {
      * @param values    the values we want to convert, not {@code null}, neither containing {@code null}
      * @param <E>       the type of the enumeration
      * @return a long[] whose values provide a binary representation of the given set of enum values
-     *         with least significant digits rightmost.
+     *         with the least significant digits rightmost.
      * @throws NullPointerException if {@code enumClass} or {@code values} is {@code null}
      * @throws IllegalArgumentException if {@code enumClass} is not an enum class, or if any {@code values} {@code null}
      * @since 3.2
@@ -175,10 +175,7 @@ public class EnumUtils {
         asEnum(enumClass);
         Objects.requireNonNull(values, "values");
         final EnumSet<E> condensed = EnumSet.noneOf(enumClass);
-        for (final E constant : values) {
-            Validate.notNull(constant, NULL_ELEMENTS_NOT_PERMITTED);
-            condensed.add(constant);
-        }
+        values.forEach(constant -> condensed.add(Validate.notNull(constant, NULL_ELEMENTS_NOT_PERMITTED)));
         final long[] result = new long[(enumClass.getEnumConstants().length - 1) / Long.SIZE + 1];
         for (final E value : condensed) {
             result[value.ordinal() / Long.SIZE] |= 1L << (value.ordinal() % Long.SIZE);
@@ -411,7 +408,7 @@ public class EnumUtils {
      *
      * <p>If you store this value, beware any changes to the enum that would affect ordinal values.</p>
      * @param enumClass the class of the enum we are working with, not {@code null}
-     * @param values     the long[] bearing the representation of a set of enum values, least significant digits rightmost, not {@code null}
+     * @param values     the long[] bearing the representation of a set of enum values, the least significant digits rightmost, not {@code null}
      * @param <E>       the type of the enumeration
      * @return a set of enum values
      * @throws NullPointerException if {@code enumClass} is {@code null}
