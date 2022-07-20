@@ -18,6 +18,8 @@ package org.apache.commons.lang3;
 
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Objects;
+
 /**
  * <p>Operations on boolean primitives and Boolean objects.</p>
  *
@@ -268,7 +270,7 @@ public class BooleanUtils {
                 if (result) {
                     return false;
                 }
-                result = element;
+                result = true;
             }
         }
         return result;
