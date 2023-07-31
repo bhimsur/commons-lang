@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.lang3.AbstractLangTest;
 import org.apache.commons.lang3.reflect.MethodUtils;
@@ -434,31 +437,39 @@ public class EqualsBuilderTest extends AbstractLangTest {
 
     @Test
     public void testObjectRecursiveGenericInteger() {
-        final TestRecursiveGenericObject<Integer> o1_a = new TestRecursiveGenericObject<>(1);
-        final TestRecursiveGenericObject<Integer> o1_b = new TestRecursiveGenericObject<>(1);
+        final TestRecursiveGenericObject<Integer> o1A = new TestRecursiveGenericObject<>(1);
+        final TestRecursiveGenericObject<Integer> o1B = new TestRecursiveGenericObject<>(1);
         final TestRecursiveGenericObject<Integer> o2 = new TestRecursiveGenericObject<>(2);
 
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_b, o1_a).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1B).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1B, o1A).isEquals());
 
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_b, o2).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1B, o2).isEquals());
+    }
+
+    @Test
+    public void testObjectsBypassReflectionClasses() {
+        final List<Class<?>> bypassReflectionClasses = new ArrayList<>();
+        bypassReflectionClasses.add(List.class);
+        bypassReflectionClasses.add(Boolean.class);
+        assertTrue(new EqualsBuilder().setBypassReflectionClasses(bypassReflectionClasses).isEquals());
     }
 
     @Test
     public void testObjectRecursiveGenericString() {
         // Note: Do not use literals, because string literals are always mapped by same object (internal() of String))!
-        final String s1_a = String.valueOf(1);
-        final TestRecursiveGenericObject<String> o1_a = new TestRecursiveGenericObject<>(s1_a);
-        final TestRecursiveGenericObject<String> o1_b = new TestRecursiveGenericObject<>(String.valueOf(1));
+        final String s1A = String.valueOf(1);
+        final TestRecursiveGenericObject<String> o1A = new TestRecursiveGenericObject<>(s1A);
+        final TestRecursiveGenericObject<String> o1B = new TestRecursiveGenericObject<>(String.valueOf(1));
         final TestRecursiveGenericObject<String> o2 = new TestRecursiveGenericObject<>(String.valueOf(2));
 
         // To trigger bug reported in LANG-1356, call hashCode only on string in instance o1_a
-        s1_a.hashCode();
+        s1A.hashCode();
 
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_b, o1_a).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1B).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1B, o1A).isEquals());
 
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_b, o2).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1B, o2).isEquals());
     }
 
     @Test
@@ -470,51 +481,51 @@ public class EqualsBuilderTest extends AbstractLangTest {
         final TestRecursiveInnerObject i3 = new TestRecursiveInnerObject(3);
         final TestRecursiveInnerObject i4 = new TestRecursiveInnerObject(4);
 
-        final TestRecursiveObject o1_a = new TestRecursiveObject(i1_1, i2_1, 1);
-        final TestRecursiveObject o1_b = new TestRecursiveObject(i1_2, i2_2, 1);
+        final TestRecursiveObject o1A = new TestRecursiveObject(i1_1, i2_1, 1);
+        final TestRecursiveObject o1B = new TestRecursiveObject(i1_2, i2_2, 1);
         final TestRecursiveObject o2 = new TestRecursiveObject(i3, i4, 2);
         final TestRecursiveObject oNull = new TestRecursiveObject(null, null, 2);
 
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1A).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1B).isEquals());
 
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1A, o2).isEquals());
 
         assertTrue(new EqualsBuilder().setTestRecursive(true).append(oNull, oNull).isEquals());
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, oNull).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1A, oNull).isEquals());
     }
 
     @Test
     public void testObjectRecursiveCycleSelfreference() {
-        final TestRecursiveCycleObject o1_a = new TestRecursiveCycleObject(1);
-        final TestRecursiveCycleObject o1_b = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject o1A = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject o1B = new TestRecursiveCycleObject(1);
         final TestRecursiveCycleObject o2 = new TestRecursiveCycleObject(2);
 
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1A).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1B).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1A, o2).isEquals());
     }
 
     @Test
     public void testObjectRecursiveCycle() {
-        final TestRecursiveCycleObject o1_a = new TestRecursiveCycleObject(1);
-        final TestRecursiveCycleObject i1_a = new TestRecursiveCycleObject(o1_a, 100);
-        o1_a.setCycle(i1_a);
+        final TestRecursiveCycleObject o1A = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject i1A = new TestRecursiveCycleObject(o1A, 100);
+        o1A.setCycle(i1A);
 
-        final TestRecursiveCycleObject o1_b = new TestRecursiveCycleObject(1);
-        final TestRecursiveCycleObject i1_b = new TestRecursiveCycleObject(o1_b, 100);
-        o1_b.setCycle(i1_b);
+        final TestRecursiveCycleObject o1B = new TestRecursiveCycleObject(1);
+        final TestRecursiveCycleObject i1B = new TestRecursiveCycleObject(o1B, 100);
+        o1B.setCycle(i1B);
 
         final TestRecursiveCycleObject o2 = new TestRecursiveCycleObject(2);
-        final TestRecursiveCycleObject i2 = new TestRecursiveCycleObject(o1_b, 200);
+        final TestRecursiveCycleObject i2 = new TestRecursiveCycleObject(o1B, 200);
         o2.setCycle(i2);
 
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_a).isEquals());
-        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1_a, o1_b).isEquals());
-        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1_a, o2).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1A).isEquals());
+        assertTrue(new EqualsBuilder().setTestRecursive(true).append(o1A, o1B).isEquals());
+        assertFalse(new EqualsBuilder().setTestRecursive(true).append(o1A, o2).isEquals());
 
-        assertTrue(EqualsBuilder.reflectionEquals(o1_a, o1_b, false, null, true));
-        assertFalse(EqualsBuilder.reflectionEquals(o1_a, o2, false, null, true));
+        assertTrue(EqualsBuilder.reflectionEquals(o1A, o1B, false, null, true));
+        assertFalse(EqualsBuilder.reflectionEquals(o1A, o2, false, null, true));
     }
 
     @Test
@@ -1186,7 +1197,7 @@ public class EqualsBuilderTest extends AbstractLangTest {
     /**
      * Tests two instances of classes that can be equal and that are not "related". The two classes are not subclasses
      * of each other and do not share a parent aside from Object.
-     * See https://issues.apache.org/bugzilla/show_bug.cgi?id=33069
+     * See https://issues.apache.org/jira/browse/LANG-6
      */
     @Test
     public void testUnrelatedClasses() {
@@ -1210,7 +1221,7 @@ public class EqualsBuilderTest extends AbstractLangTest {
     }
 
     /**
-     * Test from https://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+     * Test from https://issues.apache.org/jira/browse/LANG-42
      */
     @Test
     public void testNpeForNullElement() {
@@ -1218,7 +1229,7 @@ public class EqualsBuilderTest extends AbstractLangTest {
         final Object[] x2 = {Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3)};
 
         // causes an NPE in 2.0 according to:
-        // https://issues.apache.org/bugzilla/show_bug.cgi?id=33067
+        // https://issues.apache.org/jira/browse/LANG-42
         new EqualsBuilder().append(x1, x2);
     }
 
@@ -1245,6 +1256,11 @@ public class EqualsBuilderTest extends AbstractLangTest {
         // still equal as long as both differing fields are among excluded
         assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three"));
         assertTrue(EqualsBuilder.reflectionEquals(x1, x2, "one", "two", "three", "xxx"));
+
+        // still equal as long as both differing fields are among excluded
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2, Arrays.asList("one", "two", "three")));
+        assertTrue(EqualsBuilder.reflectionEquals(x1, x2,  Arrays.asList("one", "two", "three", "xxx")));
+
     }
 
     static class TestObjectWithMultipleFields {

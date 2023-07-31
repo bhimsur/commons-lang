@@ -32,6 +32,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.stream.Streams;
 import org.apache.commons.lang3.stream.Streams.FailableStream;
 
 /**
@@ -41,7 +43,7 @@ import org.apache.commons.lang3.stream.Streams.FailableStream;
  * constructs like:
  *
  * <pre>
- * Consumer&lt;java.lang.reflect.Method-&gt; consumer = m -&gt; {
+ * Consumer&lt;java.lang.reflect.Method&gt; consumer = m -&gt; {
  *     try {
  *         m.invoke(o, args);
  *     } catch (Throwable t) {
@@ -380,13 +382,11 @@ public class Failable {
     }
 
     /**
-     * <p>
      * Rethrows a {@link Throwable} as an unchecked exception. If the argument is already unchecked, namely a
      * {@link RuntimeException} or {@link Error} then the argument will be rethrown without modification. If the
      * exception is {@link IOException} then it will be wrapped into a {@link UncheckedIOException}. In every other
      * cases the exception will be wrapped into a {@code
      * UndeclaredThrowableException}
-     * </p>
      *
      * <p>
      * Note that there is a declared return type for this method, even though it never returns. The reason for that is
@@ -408,12 +408,7 @@ public class Failable {
      */
     public static RuntimeException rethrow(final Throwable throwable) {
         Objects.requireNonNull(throwable, "throwable");
-        if (throwable instanceof RuntimeException) {
-            throw (RuntimeException) throwable;
-        }
-        if (throwable instanceof Error) {
-            throw (Error) throwable;
-        }
+        ExceptionUtils.throwUnchecked(throwable);
         if (throwable instanceof IOException) {
             throw new UncheckedIOException((IOException) throwable);
         }
@@ -522,11 +517,7 @@ public class Failable {
         } else {
             actualErrorHandler = errorHandler;
         }
-        if (resources != null) {
-            for (final FailableRunnable<? extends Throwable> failableRunnable : resources) {
-                Objects.requireNonNull(failableRunnable, "runnable");
-            }
-        }
+        Streams.of(resources).forEach(r -> Objects.requireNonNull(r, "runnable"));
         Throwable th = null;
         try {
             action.run();

@@ -16,16 +16,14 @@
  */
 package org.apache.commons.lang3.concurrent;
 
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
-import org.apache.commons.lang3.Validate;
-
 /**
- * <p>
  * A specialized {@link BackgroundInitializer} implementation that wraps a
  * {@link Callable} object.
- * </p>
+ *
  * <p>
  * An instance of this class is initialized with a {@link Callable} object when
  * it is constructed. The implementation of the {@link #initialize()} method
@@ -61,7 +59,6 @@ import org.apache.commons.lang3.Validate;
  * // Wait for the end of initialization and access the result
  * Integer result = initializer.get();
  * </pre>
- *
  *
  * @since 3.0
  * @param <T> the type of the object managed by this initializer class
@@ -120,6 +117,6 @@ public class CallableBackgroundInitializer<T> extends BackgroundInitializer<T> {
      * @throws IllegalArgumentException if the {@link Callable} is <b>null</b>
      */
     private void checkCallable(final Callable<T> callable) {
-        Validate.notNull(callable, "callable");
+        Objects.requireNonNull(callable, "callable");
     }
 }

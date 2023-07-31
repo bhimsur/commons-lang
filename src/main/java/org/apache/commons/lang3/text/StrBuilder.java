@@ -173,7 +173,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder setNullText(String nullText) {
-        if (nullText != null && nullText.isEmpty()) {
+        if (StringUtils.isEmpty(nullText)) {
             nullText = null;
         }
         this.nullText = nullText;
@@ -608,7 +608,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (startIndex < 0 || startIndex > str.length()) {
             throw new StringIndexOutOfBoundsException("startIndex must be valid");
         }
-        if (length < 0 || (startIndex + length) > str.length()) {
+        if (length < 0 || startIndex + length > str.length()) {
             throw new StringIndexOutOfBoundsException("length must be valid");
         }
         if (length > 0) {
@@ -676,7 +676,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             if (startIndex < 0 || startIndex > totalLength) {
                 throw new StringIndexOutOfBoundsException("startIndex must be valid");
             }
-            if (length < 0 || (startIndex + length) > totalLength) {
+            if (length < 0 || startIndex + length > totalLength) {
                 throw new StringIndexOutOfBoundsException("length must be valid");
             }
             final int len = length();
@@ -726,7 +726,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (startIndex < 0 || startIndex > str.length()) {
             throw new StringIndexOutOfBoundsException("startIndex must be valid");
         }
-        if (length < 0 || (startIndex + length) > str.length()) {
+        if (length < 0 || startIndex + length > str.length()) {
             throw new StringIndexOutOfBoundsException("length must be valid");
         }
         if (length > 0) {
@@ -777,7 +777,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (startIndex < 0 || startIndex > str.length()) {
             throw new StringIndexOutOfBoundsException("startIndex must be valid");
         }
-        if (length < 0 || (startIndex + length) > str.length()) {
+        if (length < 0 || startIndex + length > str.length()) {
             throw new StringIndexOutOfBoundsException("length must be valid");
         }
         if (length > 0) {
@@ -826,7 +826,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (startIndex < 0 || startIndex > str.length()) {
             throw new StringIndexOutOfBoundsException("startIndex must be valid");
         }
-        if (length < 0 || (startIndex + length) > str.length()) {
+        if (length < 0 || startIndex + length > str.length()) {
             throw new StringIndexOutOfBoundsException("length must be valid");
         }
         if (length > 0) {
@@ -875,7 +875,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (startIndex < 0 || startIndex > chars.length) {
             throw new StringIndexOutOfBoundsException("Invalid startIndex: " + length);
         }
-        if (length < 0 || (startIndex + length) > chars.length) {
+        if (length < 0 || startIndex + length > chars.length) {
             throw new StringIndexOutOfBoundsException("Invalid length: " + length);
         }
         if (length > 0) {
@@ -1509,7 +1509,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder appendFixedWidthPadLeft(final Object obj, final int width, final char padChar) {
         if (width > 0) {
             ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
+            String str = obj == null ? getNullText() : obj.toString();
             if (str == null) {
                 str = StringUtils.EMPTY;
             }
@@ -1556,7 +1556,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder appendFixedWidthPadRight(final Object obj, final int width, final char padChar) {
         if (width > 0) {
             ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
+            String str = obj == null ? getNullText() : obj.toString();
             if (str == null) {
                 str = StringUtils.EMPTY;
             }
@@ -1860,7 +1860,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder deleteAll(final String str) {
-        final int len = (str == null ? 0 : str.length());
+        final int len = StringUtils.length(str);
         if (len > 0) {
             int index = indexOf(str, 0);
             while (index >= 0) {
@@ -1878,7 +1878,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder deleteFirst(final String str) {
-        final int len = (str == null ? 0 : str.length());
+        final int len = StringUtils.length(str);
         if (len > 0) {
             final int index = indexOf(str, 0);
             if (index >= 0) {
@@ -1953,7 +1953,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public StrBuilder replace(final int startIndex, int endIndex, final String replaceStr) {
         endIndex = validateRange(startIndex, endIndex);
-        final int insertLen = (replaceStr == null ? 0 : replaceStr.length());
+        final int insertLen = StringUtils.length(replaceStr);
         replaceImpl(startIndex, endIndex, endIndex - startIndex, replaceStr, insertLen);
         return this;
     }
@@ -2005,9 +2005,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder replaceAll(final String searchStr, final String replaceStr) {
-        final int searchLen = (searchStr == null ? 0 : searchStr.length());
+        final int searchLen = StringUtils.length(searchStr);
         if (searchLen > 0) {
-            final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+            final int replaceLen = StringUtils.length(replaceStr);
             int index = indexOf(searchStr, 0);
             while (index >= 0) {
                 replaceImpl(index, index + searchLen, searchLen, replaceStr, replaceLen);
@@ -2025,11 +2025,11 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder replaceFirst(final String searchStr, final String replaceStr) {
-        final int searchLen = (searchStr == null ? 0 : searchStr.length());
+        final int searchLen = StringUtils.length(searchStr);
         if (searchLen > 0) {
             final int index = indexOf(searchStr, 0);
             if (index >= 0) {
-                final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+                final int replaceLen = StringUtils.length(replaceStr);
                 replaceImpl(index, index + searchLen, searchLen, replaceStr, replaceLen);
             }
         }
@@ -2114,7 +2114,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         if (matcher == null || size == 0) {
             return this;
         }
-        final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+        final int replaceLen = StringUtils.length(replaceStr);
         for (int i = from; i < to && replaceCount != 0; i++) {
             final char[] buf = buffer;
             final int removeLen = matcher.isMatch(buf, i, from, to);
@@ -2419,7 +2419,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the first index of the character, or -1 if not found
      */
     public int indexOf(final char ch, int startIndex) {
-        startIndex = (Math.max(startIndex, 0));
+        startIndex = Math.max(startIndex, 0);
         if (startIndex >= size) {
             return -1;
         }
@@ -2456,33 +2456,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the first index of the string, or -1 if not found
      */
-    public int indexOf(final String str, int startIndex) {
-        startIndex = (Math.max(startIndex, 0));
-        if (str == null || startIndex >= size) {
-            return -1;
-        }
-        final int strLen = str.length();
-        if (strLen == 1) {
-            return indexOf(str.charAt(0), startIndex);
-        }
-        if (strLen == 0) {
-            return startIndex;
-        }
-        if (strLen > size) {
-            return -1;
-        }
-        final char[] thisBuf = buffer;
-        final int len = size - strLen + 1;
-        outer:
-        for (int i = startIndex; i < len; i++) {
-            for (int j = 0; j < strLen; j++) {
-                if (str.charAt(j) != thisBuf[i + j]) {
-                    continue outer;
-                }
-            }
-            return i;
-        }
-        return -1;
+    public int indexOf(final String str, final int startIndex) {
+        return StringUtils.indexOf(this, str, startIndex);
     }
 
     /**
@@ -2514,7 +2489,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the first index matched, or -1 if not found
      */
     public int indexOf(final StrMatcher matcher, int startIndex) {
-        startIndex = (Math.max(startIndex, 0));
+        startIndex = Math.max(startIndex, 0);
         if (matcher == null || startIndex >= size) {
             return -1;
         }
@@ -2546,7 +2521,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the last index of the character, or -1 if not found
      */
     public int lastIndexOf(final char ch, int startIndex) {
-        startIndex = (startIndex >= size ? size - 1 : startIndex);
+        startIndex = startIndex >= size ? size - 1 : startIndex;
         if (startIndex < 0) {
             return -1;
         }
@@ -2582,31 +2557,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @param startIndex  the index to start at, invalid index rounded to edge
      * @return the last index of the string, or -1 if not found
      */
-    public int lastIndexOf(final String str, int startIndex) {
-        startIndex = (startIndex >= size ? size - 1 : startIndex);
-        if (str == null || startIndex < 0) {
-            return -1;
-        }
-        final int strLen = str.length();
-        if (strLen > 0 && strLen <= size) {
-            if (strLen == 1) {
-                return lastIndexOf(str.charAt(0), startIndex);
-            }
-
-            outer:
-            for (int i = startIndex - strLen + 1; i >= 0; i--) {
-                for (int j = 0; j < strLen; j++) {
-                    if (str.charAt(j) != buffer[i + j]) {
-                        continue outer;
-                    }
-                }
-                return i;
-            }
-
-        } else if (strLen == 0) {
-            return startIndex;
-        }
-        return -1;
+    public int lastIndexOf(final String str, final int startIndex) {
+        return StringUtils.lastIndexOf(this, str, startIndex);
     }
 
     /**
@@ -2638,7 +2590,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the last index matched, or -1 if not found
      */
     public int lastIndexOf(final StrMatcher matcher, int startIndex) {
-        startIndex = (startIndex >= size ? size - 1 : startIndex);
+        startIndex = startIndex >= size ? size - 1 : startIndex;
         if (matcher == null || startIndex < 0) {
             return -1;
         }
@@ -3001,7 +2953,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         @Override
         public int read(final char[] b, final int off, int len) {
             if (off < 0 || len < 0 || off > b.length ||
-                    (off + len) > b.length || (off + len) < 0) {
+                    off + len > b.length || off + len < 0) {
                 throw new IndexOutOfBoundsException();
             }
             if (len == 0) {

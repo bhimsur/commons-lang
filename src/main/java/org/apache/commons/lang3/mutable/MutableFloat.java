@@ -20,6 +20,7 @@ package org.apache.commons.lang3.mutable;
  * A mutable {@code float} wrapper.
  * <p>
  * Note that as MutableFloat does not extend Float, it is not treated by String.format as a Float parameter.
+ * </p>
  *
  * @see Float
  * @since 2.1
@@ -365,7 +366,7 @@ public class MutableFloat extends Number implements Comparable<MutableFloat>, Mu
      *
      * @param obj  the object to compare with, null returns false
      * @return {@code true} if the objects are the same; {@code false} otherwise.
-     * @see java.lang.Float#floatToIntBits(float)
+     * @see Float#floatToIntBits(float)
      */
     @Override
     public boolean equals(final Object obj) {

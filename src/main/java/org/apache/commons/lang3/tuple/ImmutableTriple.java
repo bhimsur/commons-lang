@@ -19,12 +19,11 @@ package org.apache.commons.lang3.tuple;
 import java.util.Objects;
 
 /**
- * <p>An immutable triple consisting of three {@link Object} elements.</p>
+ * An immutable triple consisting of three {@link Object} elements.
  *
  * <p>Although the implementation is immutable, there is no restriction on the objects
  * that may be stored. If mutable objects are stored in the triple, then the triple
- * itself effectively becomes mutable. The class is also {@code final}, so a subclass
- * can not add undesirable behavior.</p>
+ * itself effectively becomes mutable.</p>
  *
  * <p>#ThreadSafe# if all three objects are thread-safe</p>
  *
@@ -80,12 +79,13 @@ public class ImmutableTriple<L, M, R> extends Triple<L, M, R> {
      * @return an immutable triple of nulls.
      * @since 3.6
      */
+    @SuppressWarnings("unchecked")
     public static <L, M, R> ImmutableTriple<L, M, R> nullTriple() {
         return NULL;
     }
 
     /**
-     * <p>Obtains an immutable triple of three objects inferring the generic types.</p>
+     * Obtains an immutable triple of three objects inferring the generic types.
      *
      * <p>This factory allows the triple to be created using inference to
      * obtain the generic types.</p>
@@ -103,7 +103,7 @@ public class ImmutableTriple<L, M, R> extends Triple<L, M, R> {
     }
 
     /**
-     * <p>Obtains an immutable triple of three non-null objects inferring the generic types.</p>
+     * Obtains an immutable triple of three non-null objects inferring the generic types.
      *
      * <p>This factory allows the triple to be created using inference to
      * obtain the generic types.</p>

@@ -31,8 +31,8 @@ import org.apache.commons.lang3.text.translate.UnicodeUnescaper;
 import org.apache.commons.lang3.text.translate.UnicodeUnpairedSurrogateRemover;
 
 /**
- * <p>Escapes and unescapes {@link String}s for
- * Java, Java Script, HTML and XML.</p>
+ * Escapes and unescapes {@link String}s for
+ * Java, Java Script, HTML and XML.
  *
  * <p>#ThreadSafe#</p>
  * @since 2.0
@@ -418,8 +418,8 @@ public class StringEscapeUtils {
     /* Helper functions */
 
     /**
-     * <p>{@link StringEscapeUtils} instances should NOT be constructed in
-     * standard programming.</p>
+     * {@link StringEscapeUtils} instances should NOT be constructed in
+     * standard programming.
      *
      * <p>Instead, the class should be used as:</p>
      * <pre>StringEscapeUtils.escapeJava("foo");</pre>
@@ -431,7 +431,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using Java String rules.</p>
+     * Escapes the characters in a {@link String} using Java String rules.
      *
      * <p>Deals correctly with quotes and control-chars (tab, backslash, cr, ff, etc.) </p>
      *
@@ -455,7 +455,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using EcmaScript String rules.</p>
+     * Escapes the characters in a {@link String} using EcmaScript String rules.
      * <p>Escapes any values it finds into their EcmaScript String form.
      * Deals correctly with quotes and control-chars (tab, backslash, cr, ff, etc.) </p>
      *
@@ -465,7 +465,7 @@ public class StringEscapeUtils {
      * <p>The only difference between Java strings and EcmaScript strings
      * is that in EcmaScript, a single quote and forward-slash (/) are escaped.</p>
      *
-     * <p>Note that EcmaScript is best known by the JavaScript and ActionScript dialects. </p>
+     * <p>Note that EcmaScript is best known by the JavaScript and ActionScript dialects.</p>
      *
      * <p>Example:</p>
      * <pre>
@@ -483,7 +483,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using Json String rules.</p>
+     * Escapes the characters in a {@link String} using Json String rules.
      * <p>Escapes any values it finds into their Json String form.
      * Deals correctly with quotes and control-chars (tab, backslash, cr, ff, etc.) </p>
      *
@@ -493,7 +493,7 @@ public class StringEscapeUtils {
      * <p>The only difference between Java strings and Json strings
      * is that in Json, forward-slash (/) is escaped.</p>
      *
-     * <p>See http://www.ietf.org/rfc/rfc4627.txt for further details. </p>
+     * <p>See https://www.ietf.org/rfc/rfc4627.txt for further details.</p>
      *
      * <p>Example:</p>
      * <pre>
@@ -511,10 +511,10 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes any Java literals found in the {@link String}.
+     * Unescapes any Java literals found in the {@link String}.
      * For example, it will turn a sequence of {@code '\'} and
      * {@code 'n'} into a newline character, unless the {@code '\'}
-     * is preceded by another {@code '\'}.</p>
+     * is preceded by another {@code '\'}.
      *
      * @param input  the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
@@ -524,7 +524,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes any EcmaScript literals found in the {@link String}.</p>
+     * Unescapes any EcmaScript literals found in the {@link String}.
      *
      * <p>For example, it will turn a sequence of {@code '\'} and {@code 'n'}
      * into a newline character, unless the {@code '\'} is preceded by another
@@ -541,7 +541,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes any Json literals found in the {@link String}.</p>
+     * Unescapes any Json literals found in the {@link String}.
      *
      * <p>For example, it will turn a sequence of {@code '\'} and {@code 'n'}
      * into a newline character, unless the {@code '\'} is preceded by another
@@ -558,7 +558,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using HTML entities.</p>
+     * Escapes the characters in a {@link String} using HTML entities.
      *
      * <p>
      * For example:
@@ -571,16 +571,16 @@ public class StringEscapeUtils {
      *
      * <p>Supports all known HTML 4.0 entities, including funky accents.
      * Note that the commonly used apostrophe escape character (&amp;apos;)
-     * is not a legal entity and so is not supported). </p>
+     * is not a legal entity and so is not supported).</p>
      *
      * @param input  the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
      *
-     * @see <a href="http://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
-     * @see <a href="http://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
-     * @see <a href="http://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
-     * @see <a href="http://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
-     * @see <a href="http://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
+     * @see <a href="https://web.archive.org/web/20060225074150/https://hotwired.lycos.com/webmonkey/reference/special_characters/">ISO Entities</a>
+     * @see <a href="https://www.w3.org/TR/REC-html32#latin1">HTML 3.2 Character Entities for ISO Latin-1</a>
+     * @see <a href="https://www.w3.org/TR/REC-html40/sgml/entities.html">HTML 4.0 Character entity references</a>
+     * @see <a href="https://www.w3.org/TR/html401/charset.html#h-5.3">HTML 4.01 Character References</a>
+     * @see <a href="https://www.w3.org/TR/html401/charset.html#code-position">HTML 4.01 Code positions</a>
      *
      * @since 3.0
      */
@@ -589,8 +589,8 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using HTML entities.</p>
-     * <p>Supports only the HTML 3.0 entities. </p>
+     * Escapes the characters in a {@link String} using HTML entities.
+     * <p>Supports only the HTML 3.0 entities.</p>
      *
      * @param input  the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
@@ -602,9 +602,9 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes a string containing entity escapes to a string
+     * Unescapes a string containing entity escapes to a string
      * containing the actual Unicode characters corresponding to the
-     * escapes. Supports HTML 4.0 entities.</p>
+     * escapes. Supports HTML 4.0 entities.
      *
      * <p>For example, the string {@code "&lt;Fran&ccedil;ais&gt;"}
      * will become {@code "<Français>"}</p>
@@ -623,9 +623,9 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes a string containing entity escapes to a string
+     * Unescapes a string containing entity escapes to a string
      * containing the actual Unicode characters corresponding to the
-     * escapes. Supports only HTML 3.0 entities.</p>
+     * escapes. Supports only HTML 3.0 entities.
      *
      * @param input  the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
@@ -637,7 +637,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using XML entities.</p>
+     * Escapes the characters in a {@link String} using XML entities.
      *
      * <p>For example: {@code "bread" & "butter"} =&gt;
      * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
@@ -653,7 +653,7 @@ public class StringEscapeUtils {
      *
      * @param input  the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
-     * @see #unescapeXml(java.lang.String)
+     * @see #unescapeXml(String)
      * @deprecated use {@link #escapeXml10(java.lang.String)} or {@link #escapeXml11(java.lang.String)} instead.
      */
     @Deprecated
@@ -662,7 +662,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using XML entities.</p>
+     * Escapes the characters in a {@link String} using XML entities.
      *
      * <p>For example: {@code "bread" & "butter"} =&gt;
      * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
@@ -686,7 +686,7 @@ public class StringEscapeUtils {
      *
      * @param input  the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
-     * @see #unescapeXml(java.lang.String)
+     * @see #unescapeXml(String)
      * @since 3.3
      */
     public static String escapeXml10(final String input) {
@@ -694,7 +694,7 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Escapes the characters in a {@link String} using XML entities.</p>
+     * Escapes the characters in a {@link String} using XML entities.
      *
      * <p>For example: {@code "bread" & "butter"} =&gt;
      * {@code &quot;bread&quot; &amp; &quot;butter&quot;}.
@@ -716,7 +716,7 @@ public class StringEscapeUtils {
      *
      * @param input  the {@link String} to escape, may be null
      * @return a new escaped {@link String}, {@code null} if null string input
-     * @see #unescapeXml(java.lang.String)
+     * @see #unescapeXml(String)
      * @since 3.3
      */
     public static String escapeXml11(final String input) {
@@ -724,15 +724,15 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Unescapes a string containing XML entity escapes to a string
+     * Unescapes a string containing XML entity escapes to a string
      * containing the actual Unicode characters corresponding to the
-     * escapes.</p>
+     * escapes.
      *
      * <p>Supports only the five basic XML entities (gt, lt, quot, amp, apos).
      * Does not support DTDs or external entities.</p>
      *
      * <p>Note that numerical \\u Unicode codes are unescaped to their respective
-     *    Unicode characters. This may change in future releases. </p>
+     *    Unicode characters. This may change in future releases.</p>
      *
      * @param input  the {@link String} to unescape, may be null
      * @return a new unescaped {@link String}, {@code null} if null string input
@@ -746,8 +746,8 @@ public class StringEscapeUtils {
 
 
     /**
-     * <p>Returns a {@link String} value for a CSV column enclosed in double quotes,
-     * if required.</p>
+     * Returns a {@link String} value for a CSV column enclosed in double quotes,
+     * if required.
      *
      * <p>If the value contains a comma, newline or double quote, then the
      *    String value is returned enclosed in double quotes.</p>
@@ -757,8 +757,8 @@ public class StringEscapeUtils {
      * <p>If the value does not contain a comma, newline or double quote, then the
      *    String value is returned unchanged.</p>
      *
-     * see <a href="http://en.wikipedia.org/wiki/Comma-separated_values">Wikipedia</a> and
-     * <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>.
+     * see <a href="https://en.wikipedia.org/wiki/Comma-separated_values">Wikipedia</a> and
+     * <a href="https://datatracker.ietf.org/doc/html/rfc4180">RFC 4180</a>.
      *
      * @param input the input CSV column String, may be null
      * @return the input String, enclosed in double quotes if the value contains a comma,
@@ -770,20 +770,20 @@ public class StringEscapeUtils {
     }
 
     /**
-     * <p>Returns a {@link String} value for an unescaped CSV column. </p>
+     * Returns a {@link String} value for an unescaped CSV column.
      *
      * <p>If the value is enclosed in double quotes, and contains a comma, newline
      *    or double quote, then quotes are removed.
      * </p>
      *
      * <p>Any double quote escaped characters (a pair of double quotes) are unescaped
-     *    to just one double quote. </p>
+     *    to just one double quote.</p>
      *
      * <p>If the value is not enclosed in double quotes, or is and does not contain a
      *    comma, newline or double quote, then the String value is returned unchanged.</p>
      *
-     * see <a href="http://en.wikipedia.org/wiki/Comma-separated_values">Wikipedia</a> and
-     * <a href="http://tools.ietf.org/html/rfc4180">RFC 4180</a>.
+     * see <a href="https://en.wikipedia.org/wiki/Comma-separated_values">Wikipedia</a> and
+     * <a href="https://datatracker.ietf.org/doc/html/rfc4180">RFC 4180</a>.
      *
      * @param input the input CSV column String, may be null
      * @return the input String, with enclosing double quotes removed and embedded double

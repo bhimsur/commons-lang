@@ -18,14 +18,14 @@ package org.apache.commons.lang3.reflect;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
- * <p> Utility reflection methods focused on constructors, modeled after
- * {@link MethodUtils}. </p>
+ *  Utility reflection methods focused on constructors, modeled after
+ * {@link MethodUtils}.
  *
  * <h2>Known Limitations</h2>
  * <h3>Accessing Public Constructors In A Default Access Superclass</h3>
@@ -46,9 +46,9 @@ import org.apache.commons.lang3.Validate;
 public class ConstructorUtils {
 
     /**
-     * <p>ConstructorUtils instances should NOT be constructed in standard
+     * ConstructorUtils instances should NOT be constructed in standard
      * programming. Instead, the class should be used as
-     * {@code ConstructorUtils.invokeConstructor(cls, args)}.</p>
+     * {@code ConstructorUtils.invokeConstructor(cls, args)}.
      *
      * <p>This constructor is {@code public} to permit tools that require a JavaBean
      * instance to operate.</p>
@@ -57,8 +57,8 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Returns a new instance of the specified class inferring the right constructor
-     * from the types of the arguments.</p>
+     * Returns a new instance of the specified class inferring the right constructor
+     * from the types of the arguments.
      *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the argument types by assignment compatibility.</p>
@@ -73,7 +73,7 @@ public class ConstructorUtils {
      * @throws IllegalAccessException if invocation is not permitted by security
      * @throws InvocationTargetException if an error occurs on invocation
      * @throws InstantiationException if an error occurs on instantiation
-     * @see #invokeConstructor(java.lang.Class, java.lang.Object[], java.lang.Class[])
+     * @see #invokeConstructor(Class, Object[], Class[])
      */
     public static <T> T invokeConstructor(final Class<T> cls, Object... args)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
@@ -83,8 +83,8 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Returns a new instance of the specified class choosing the right constructor
-     * from the list of parameter types.</p>
+     * Returns a new instance of the specified class choosing the right constructor
+     * from the list of parameter types.
      *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the parameter types by assignment compatibility.</p>
@@ -120,8 +120,8 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Returns a new instance of the specified class inferring the right constructor
-     * from the types of the arguments.</p>
+     * Returns a new instance of the specified class inferring the right constructor
+     * from the types of the arguments.
      *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the argument types exactly.</p>
@@ -136,7 +136,7 @@ public class ConstructorUtils {
      * @throws IllegalAccessException if invocation is not permitted by security
      * @throws InvocationTargetException if an error occurs on invocation
      * @throws InstantiationException if an error occurs on instantiation
-     * @see #invokeExactConstructor(java.lang.Class, java.lang.Object[], java.lang.Class[])
+     * @see #invokeExactConstructor(Class, Object[], Class[])
      */
     public static <T> T invokeExactConstructor(final Class<T> cls, Object... args)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
@@ -146,8 +146,8 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Returns a new instance of the specified class choosing the right constructor
-     * from the list of parameter types.</p>
+     * Returns a new instance of the specified class choosing the right constructor
+     * from the list of parameter types.
      *
      * <p>This locates and calls a constructor.
      * The constructor signature must match the parameter types exactly.</p>
@@ -179,7 +179,7 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Finds a constructor given a class and signature, checking accessibility.</p>
+     * Finds a constructor given a class and signature, checking accessibility.
      *
      * <p>This finds the constructor and ensures that it is accessible.
      * The constructor signature must match the parameter types exactly.</p>
@@ -194,7 +194,7 @@ public class ConstructorUtils {
      */
     public static <T> Constructor<T> getAccessibleConstructor(final Class<T> cls,
             final Class<?>... parameterTypes) {
-        Validate.notNull(cls, "cls");
+        Objects.requireNonNull(cls, "cls");
         try {
             return getAccessibleConstructor(cls.getConstructor(parameterTypes));
         } catch (final NoSuchMethodException e) {
@@ -203,24 +203,24 @@ public class ConstructorUtils {
     }
 
     /**
-     * <p>Checks if the specified constructor is accessible.</p>
+     * Checks if the specified constructor is accessible.
      *
      * <p>This simply ensures that the constructor is accessible.</p>
      *
      * @param <T> the constructor type
      * @param ctor  the prototype constructor object, not {@code null}
      * @return the constructor, {@code null} if no matching accessible constructor found
-     * @see java.lang.SecurityManager
+     * @see SecurityManager
      * @throws NullPointerException if {@code ctor} is {@code null}
      */
     public static <T> Constructor<T> getAccessibleConstructor(final Constructor<T> ctor) {
-        Validate.notNull(ctor, "ctor");
+        Objects.requireNonNull(ctor, "ctor");
         return MemberUtils.isAccessible(ctor)
                 && isAccessible(ctor.getDeclaringClass()) ? ctor : null;
     }
 
     /**
-     * <p>Finds an accessible constructor with compatible parameters.</p>
+     * Finds an accessible constructor with compatible parameters.
      *
      * <p>This checks all the constructor and finds one with compatible parameters
      * This requires that every parameter is assignable from the given parameter types.
@@ -239,7 +239,7 @@ public class ConstructorUtils {
      */
     public static <T> Constructor<T> getMatchingAccessibleConstructor(final Class<T> cls,
             final Class<?>... parameterTypes) {
-        Validate.notNull(cls, "cls");
+        Objects.requireNonNull(cls, "cls");
         // see if we can find the constructor directly
         // most of the time this works and it's much faster
         try {

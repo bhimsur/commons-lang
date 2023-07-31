@@ -46,12 +46,13 @@ public interface FailableConsumer<T, E extends Throwable> {
      * @param <E> The kind of thrown exception or error.
      * @return The NOP singleton.
      */
+    @SuppressWarnings("unchecked")
     static <T, E extends Throwable> FailableConsumer<T, E> nop() {
         return NOP;
     }
 
     /**
-     * Accepts the consumer.
+     * Accepts the given arguments.
      *
      * @param object the parameter for the consumable to accept
      * @throws E Thrown when the consumer fails.

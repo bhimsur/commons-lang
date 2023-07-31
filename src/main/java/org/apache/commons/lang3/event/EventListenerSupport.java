@@ -28,18 +28,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>An EventListenerSupport object can be used to manage a list of event
+ * An EventListenerSupport object can be used to manage a list of event
  * listeners of a particular type. The class provides
  * {@link #addListener(Object)} and {@link #removeListener(Object)} methods
  * for registering listeners, as well as a {@link #fire()} method for firing
  * events to the listeners.
- * </p>
  *
  * <p>
  * To use this class, suppose you want to support ActionEvents.  You would do:
@@ -141,8 +141,8 @@ public class EventListenerSupport<L> implements Serializable {
      */
     public EventListenerSupport(final Class<L> listenerInterface, final ClassLoader classLoader) {
         this();
-        Validate.notNull(listenerInterface, "listenerInterface");
-        Validate.notNull(classLoader, "classLoader");
+        Objects.requireNonNull(listenerInterface, "listenerInterface");
+        Objects.requireNonNull(classLoader, "classLoader");
         Validate.isTrue(listenerInterface.isInterface(), "Class %s is not an interface",
                 listenerInterface.getName());
         initializeTransientFields(listenerInterface, classLoader);
@@ -195,7 +195,7 @@ public class EventListenerSupport<L> implements Serializable {
      * @since 3.5
      */
     public void addListener(final L listener, final boolean allowDuplicate) {
-        Validate.notNull(listener, "listener");
+        Objects.requireNonNull(listener, "listener");
         if (allowDuplicate || !listeners.contains(listener)) {
             listeners.add(listener);
         }
@@ -219,7 +219,7 @@ public class EventListenerSupport<L> implements Serializable {
      *         {@code null}.
      */
     public void removeListener(final L listener) {
-        Validate.notNull(listener, "listener");
+        Objects.requireNonNull(listener, "listener");
         listeners.remove(listener);
     }
 

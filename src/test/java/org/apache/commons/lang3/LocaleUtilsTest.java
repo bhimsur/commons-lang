@@ -82,8 +82,8 @@ public class LocaleUtilsTest extends AbstractLangTest {
         assertNotNull(locale, "valid locale");
         assertEquals(language, locale.getLanguage());
         //country and variant are empty
-        assertTrue(locale.getCountry() == null || locale.getCountry().isEmpty());
-        assertTrue(locale.getVariant() == null || locale.getVariant().isEmpty());
+        assertTrue(StringUtils.isEmpty(locale.getCountry()));
+        assertTrue(StringUtils.isEmpty(locale.getVariant()));
     }
 
     /**
@@ -99,7 +99,7 @@ public class LocaleUtilsTest extends AbstractLangTest {
         assertEquals(language, locale.getLanguage());
         assertEquals(country, locale.getCountry());
         //variant is empty
-        assertTrue(locale.getVariant() == null || locale.getVariant().isEmpty());
+        assertTrue(StringUtils.isEmpty(locale.getVariant()));
     }
 
     /**
@@ -204,7 +204,7 @@ public class LocaleUtilsTest extends AbstractLangTest {
         assertValidToLocale("us_EN_A", "us", "EN", "A");
         assertValidToLocale("us-EN-A", "us", "EN", "A");
         // this isn't pretty, but was caused by a jdk bug it seems
-        // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4210525
+        // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4210525
         if (SystemUtils.isJavaVersionAtLeast(JAVA_1_4)) {
             assertValidToLocale("us_EN_a", "us", "EN", "a");
             assertValidToLocale("us_EN_SFsafdFDsdfF", "us", "EN", "SFsafdFDsdfF");
@@ -396,8 +396,7 @@ public class LocaleUtilsTest extends AbstractLangTest {
             while (iterator.hasNext()) {
                 final Locale locale = iterator.next();
                 // should have an en empty variant
-                assertTrue(locale.getVariant() == null
-                        || locale.getVariant().isEmpty());
+                assertTrue(StringUtils.isEmpty(locale.getVariant()));
                 assertEquals(country, locale.getCountry());
                 if (language.equals(locale.getLanguage())) {
                     found = true;
@@ -443,8 +442,7 @@ public class LocaleUtilsTest extends AbstractLangTest {
             while (iterator.hasNext()) {
                 final Locale locale = iterator.next();
                 // should have an en empty variant
-                assertTrue(locale.getVariant() == null
-                        || locale.getVariant().isEmpty());
+                assertTrue(StringUtils.isEmpty(locale.getVariant()));
                 assertEquals(language, locale.getLanguage());
                 if (country.equals(locale.getCountry())) {
                     found = true;

@@ -16,18 +16,18 @@
  */
 package org.apache.commons.lang3.builder;
 
-import static org.apache.commons.lang3.reflect.FieldUtils.readField;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
+import org.apache.commons.lang3.ArraySorter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 /**
- * <p>
  * Assists in implementing {@link Diffable#diff(Object)} methods.
- * </p>
+ *
  * <p>
  * All non-static, non-transient fields (including inherited fields)
  * of the objects to diff are discovered using reflection and compared
@@ -59,24 +59,33 @@ import org.apache.commons.lang3.reflect.FieldUtils;
  * {@code DiffResult.toString()} method. This style choice can be overridden by
  * calling {@link DiffResult#toString(ToStringStyle)}.
  * </p>
+ * <p>
+ * See {@link DiffBuilder} for a non-reflection based version of this class.
+ * </p>
  * @param <T>
  *            type of the left and right object to diff.
  * @see Diffable
  * @see Diff
  * @see DiffResult
  * @see ToStringStyle
+ * @see DiffBuilder
  * @since 3.6
  */
 public class ReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
 
-    private final Object left;
-    private final Object right;
+    private final T left;
+    private final T right;
     private final DiffBuilder<T> diffBuilder;
 
     /**
-     * <p>
+     * Field names to exclude from output. Intended for fields like {@code "password"} or {@code "lastModificationDate"}.
+     *
+     * @since 3.13.0
+     */
+    private String[] excludeFieldNames;
+
+    /**
      * Constructs a builder for the specified objects with the specified style.
-     * </p>
      *
      * <p>
      * If {@code lhs == rhs} or {@code lhs.equals(rhs)} then the builder will
@@ -96,7 +105,36 @@ public class ReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
     public ReflectionDiffBuilder(final T lhs, final T rhs, final ToStringStyle style) {
         this.left = lhs;
         this.right = rhs;
-        diffBuilder = new DiffBuilder<>(lhs, rhs, style);
+        this.diffBuilder = new DiffBuilder<>(lhs, rhs, style);
+    }
+
+    /**
+     * Gets the field names that should be excluded from the diff.
+     *
+     * @return Returns the excludeFieldNames.
+     * @since 3.13.0
+     */
+    public String[] getExcludeFieldNames() {
+        return this.excludeFieldNames.clone();
+    }
+
+
+    /**
+     * Sets the field names to exclude.
+     *
+     * @param excludeFieldNamesParam
+     *            The field names to exclude from the diff or {@code null}.
+     * @return {@code this}
+     * @since 3.13.0
+     */
+    public ReflectionDiffBuilder<T> setExcludeFieldNames(final String... excludeFieldNamesParam) {
+        if (excludeFieldNamesParam == null) {
+            this.excludeFieldNames = ArrayUtils.EMPTY_STRING_ARRAY;
+        } else {
+            // clone and remove nulls
+            this.excludeFieldNames = ArraySorter.sort(ReflectionToStringBuilder.toNoNullStringArray(excludeFieldNamesParam));
+        }
+        return this;
     }
 
     @Override
@@ -113,12 +151,11 @@ public class ReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
         for (final Field field : FieldUtils.getAllFields(clazz)) {
             if (accept(field)) {
                 try {
-                    diffBuilder.append(field.getName(), readField(field, left, true),
-                            readField(field, right, true));
-                } catch (final IllegalAccessException ex) {
-                    //this can't happen. Would get a Security exception instead
-                    //throw a runtime exception in case the impossible happens.
-                    throw new InternalError("Unexpected IllegalAccessException: " + ex.getMessage());
+                    diffBuilder.append(field.getName(), FieldUtils.readField(field, left, true), FieldUtils.readField(field, right, true));
+                } catch (final IllegalAccessException e) {
+                    // this can't happen. Would get a Security exception instead
+                    // throw a runtime exception in case the impossible happens.
+                    throw new IllegalArgumentException("Unexpected IllegalAccessException: " + e.getMessage(), e);
                 }
             }
         }
@@ -131,7 +168,15 @@ public class ReflectionDiffBuilder<T> implements Builder<DiffResult<T>> {
         if (Modifier.isTransient(field.getModifiers())) {
             return false;
         }
-        return !Modifier.isStatic(field.getModifiers());
+        if (Modifier.isStatic(field.getModifiers())) {
+            return false;
+        }
+        if (this.excludeFieldNames != null
+                && Arrays.binarySearch(this.excludeFieldNames, field.getName()) >= 0) {
+            // Reject fields from the getExcludeFieldNames list.
+            return false;
+        }
+        return !field.isAnnotationPresent(DiffExclude.class);
     }
 
 }

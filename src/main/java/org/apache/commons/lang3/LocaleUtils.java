@@ -25,9 +25,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- * <p>Operations to assist when working with a {@link Locale}.</p>
+ * Operations to assist when working with a {@link Locale}.
  *
  * <p>This class tries to handle {@code null} input gracefully.
  * An exception will not be thrown for a {@code null} input.
@@ -62,7 +64,7 @@ public class LocaleUtils {
         new ConcurrentHashMap<>();
 
     /**
-     * <p>Obtains an unmodifiable list of installed locales.</p>
+     * Obtains an unmodifiable list of installed locales.
      *
      * <p>This method is a wrapper around {@link Locale#getAvailableLocales()}.
      * It is more efficient, as the JDK method must create a new array each
@@ -74,8 +76,12 @@ public class LocaleUtils {
         return SyncAvoid.AVAILABLE_LOCALE_LIST;
     }
 
+    private static List<Locale> availableLocaleList(final Predicate<Locale> predicate) {
+        return availableLocaleList().stream().filter(predicate).collect(Collectors.toList());
+    }
+
     /**
-     * <p>Obtains an unmodifiable set of installed locales.</p>
+     * Obtains an unmodifiable set of installed locales.
      *
      * <p>This method is a wrapper around {@link Locale#getAvailableLocales()}.
      * It is more efficient, as the JDK method must create a new array each
@@ -88,7 +94,7 @@ public class LocaleUtils {
     }
 
     /**
-     * <p>Obtains the list of countries supported for a given language.</p>
+     * Obtains the list of countries supported for a given language.
      *
      * <p>This method takes a language code and searches to find the
      * countries available for that language. Variant locales are removed.</p>
@@ -100,20 +106,12 @@ public class LocaleUtils {
         if (languageCode == null) {
             return Collections.emptyList();
         }
-        return cCountriesByLanguage.computeIfAbsent(languageCode, lc -> {
-            final List<Locale> countries = new ArrayList<>();
-            final List<Locale> locales = availableLocaleList();
-            for (final Locale locale : locales) {
-                if (languageCode.equals(locale.getLanguage()) && !locale.getCountry().isEmpty() && locale.getVariant().isEmpty()) {
-                    countries.add(locale);
-                }
-            }
-            return Collections.unmodifiableList(countries);
-        });
+        return cCountriesByLanguage.computeIfAbsent(languageCode, lc -> Collections.unmodifiableList(
+            availableLocaleList(locale -> languageCode.equals(locale.getLanguage()) && !locale.getCountry().isEmpty() && locale.getVariant().isEmpty())));
     }
 
     /**
-     * <p>Checks if the locale specified is in the set of available locales.</p>
+     * Checks if the locale specified is in the set of available locales.
      *
      * @param locale the Locale object to check if it is available
      * @return true if the locale is a known locale
@@ -153,7 +151,7 @@ public class LocaleUtils {
     }
 
     /**
-     * <p>Obtains the list of languages supported for a given country.</p>
+     * Obtains the list of languages supported for a given country.
      *
      * <p>This method takes a country code and searches to find the
      * languages available for that country. Variant locales are removed.</p>
@@ -165,21 +163,13 @@ public class LocaleUtils {
         if (countryCode == null) {
             return Collections.emptyList();
         }
-        return cLanguagesByCountry.computeIfAbsent(countryCode, k -> {
-            final List<Locale> locales = availableLocaleList();
-            final List<Locale> langs = new ArrayList<>();
-            for (final Locale locale : locales) {
-                if (countryCode.equals(locale.getCountry()) && locale.getVariant().isEmpty()) {
-                    langs.add(locale);
-                }
-            }
-            return Collections.unmodifiableList(langs);
-        });
+        return cLanguagesByCountry.computeIfAbsent(countryCode,
+            k -> Collections.unmodifiableList(availableLocaleList(locale -> countryCode.equals(locale.getCountry()) && locale.getVariant().isEmpty())));
     }
 
     /**
-     * <p>Obtains the list of locales to search through when performing
-     * a locale search.</p>
+     * Obtains the list of locales to search through when performing
+     * a locale search.
      *
      * <pre>
      * localeLookupList(Locale("fr", "CA", "xxx"))
@@ -194,8 +184,8 @@ public class LocaleUtils {
     }
 
     /**
-     * <p>Obtains the list of locales to search through when performing
-     * a locale search.</p>
+     * Obtains the list of locales to search through when performing
+     * a locale search.
      *
      * <pre>
      * localeLookupList(Locale("fr", "CA", "xxx"), Locale("en"))
@@ -273,7 +263,7 @@ public class LocaleUtils {
     }
 
     /**
-     * <p>Converts a String to a Locale.</p>
+     * Converts a String to a Locale.
      *
      * <p>This method takes the string format of a locale and creates the
      * locale object from it.</p>
@@ -344,8 +334,8 @@ public class LocaleUtils {
     }
 
     /**
-     * <p>{@link LocaleUtils} instances should NOT be constructed in standard programming.
-     * Instead, the class should be used as {@code LocaleUtils.toLocale("en_GB");}.</p>
+     * {@link LocaleUtils} instances should NOT be constructed in standard programming.
+     * Instead, the class should be used as {@code LocaleUtils.toLocale("en_GB");}.
      *
      * <p>This constructor is public to permit tools that require a JavaBean instance
      * to operate.</p>

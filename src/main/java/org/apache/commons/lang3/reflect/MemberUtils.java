@@ -101,7 +101,7 @@ final class MemberUtils {
      * @return {@code true} if {@code m} is accessible
      */
     static boolean isAccessible(final Member member) {
-        return member != null && isPublic(member) && !member.isSynthetic();
+        return isPublic(member) && !member.isSynthetic();
     }
 
     /**
@@ -301,8 +301,8 @@ final class MemberUtils {
     }
 
     /**
-     * <p> A class providing a subset of the API of java.lang.reflect.Executable in Java 1.8,
-     * providing a common representation for function signatures for Constructors and Methods.</p>
+     *  A class providing a subset of the API of java.lang.reflect.Executable in Java 1.8,
+     * providing a common representation for function signatures for Constructors and Methods.
      */
     private static final class Executable {
       private final Class<?>[] parameterTypes;

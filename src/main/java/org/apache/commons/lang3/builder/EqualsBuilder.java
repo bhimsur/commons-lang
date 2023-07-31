@@ -30,11 +30,11 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * <p>Assists in implementing {@link Object#equals(Object)} methods.</p>
+ * Assists in implementing {@link Object#equals(Object)} methods.
  *
  * <p> This class provides methods to build a good equals method for any
  * class. It follows rules laid out in
- * <a href="http://www.oracle.com/technetwork/java/effectivejava-136174.html">Effective Java</a>
+ * <a href="https://www.oracle.com/java/technologies/effectivejava.html">Effective Java</a>
  * , by Joshua Bloch. In particular the rule for comparing {@code doubles},
  * {@code floats}, and arrays can be tricky. Also, making sure that
  * {@code equals()} and {@code hashCode()} are consistent can be
@@ -89,9 +89,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class EqualsBuilder implements Builder<Boolean> {
 
     /**
-     * <p>
      * A registry of objects used by reflection methods to detect cyclical object references and avoid infinite loops.
-     * </p>
      *
      * @since 3.0
      */
@@ -115,10 +113,8 @@ public class EqualsBuilder implements Builder<Boolean> {
      */
 
     /**
-     * <p>
      * Returns the registry of object pairs being traversed by the reflection
      * methods in the current thread.
-     * </p>
      *
      * @return Set the registry of objects being traversed
      * @since 3.0
@@ -128,9 +124,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>
      * Converters value pair into a register pair.
-     * </p>
      *
      * @param lhs {@code this} object
      * @param rhs the other object
@@ -144,12 +138,10 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>
      * Returns {@code true} if the registry contains the given object pair.
      * Used by the reflection methods to avoid infinite loops.
      * Objects might be swapped therefore a check is needed if the object pair
      * is registered in given or swapped order.
-     * </p>
      *
      * @param lhs {@code this} object to lookup in registry
      * @param rhs the other object to lookup on registry
@@ -166,10 +158,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>
      * Registers the given object pair.
      * Used by the reflection methods to avoid infinite loops.
-     * </p>
      *
      * @param lhs {@code this} object to register
      * @param rhs the other object to register
@@ -185,9 +175,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>
      * Unregisters the given object pair.
-     * </p>
      *
      * <p>
      * Used by the reflection methods to avoid infinite loops.
@@ -199,8 +187,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     private static void unregister(final Object lhs, final Object rhs) {
         final Set<Pair<IDKey, IDKey>> registry = getRegistry();
         if (registry != null) {
-            final Pair<IDKey, IDKey> pair = getRegisterPair(lhs, rhs);
-            registry.remove(pair);
+            registry.remove(getRegisterPair(lhs, rhs));
             if (registry.isEmpty()) {
                 REGISTRY.remove();
             }
@@ -220,21 +207,21 @@ public class EqualsBuilder implements Builder<Boolean> {
     private String[] excludeFields;
 
     /**
-     * <p>Constructor for EqualsBuilder.</p>
+     * Constructor for EqualsBuilder.
      *
      * <p>Starts off assuming that equals is {@code true}.</p>
      * @see Object#equals(Object)
      */
     public EqualsBuilder() {
         // set up default classes to bypass reflection for
-        bypassReflectionClasses = new ArrayList<>();
+        bypassReflectionClasses = new ArrayList<>(1);
         bypassReflectionClasses.add(String.class); //hashCode field being lazy but not transient
     }
 
     /**
      * Set whether to include transient fields when reflectively comparing objects.
      * @param testTransients whether to test transient fields
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @since 3.6
      */
     public EqualsBuilder setTestTransients(final boolean testTransients) {
@@ -247,7 +234,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      * String objects, which cache a hash value, are automatically excluded from recursive testing.
      * You may specify other exceptions by calling {@link #setBypassReflectionClasses(List)}.
      * @param testRecursive whether to do a recursive test
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @see #setBypassReflectionClasses(List)
      * @since 3.6
      */
@@ -257,15 +244,15 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Set {@link Class}es whose instances should be compared by calling their {@code equals}
-     * although being in recursive mode. So the fields of theses classes will not be compared recursively by reflection.</p>
+     * Set {@link Class}es whose instances should be compared by calling their {@code equals}
+     * although being in recursive mode. So the fields of theses classes will not be compared recursively by reflection.
      *
      * <p>Here you should name classes having non-transient fields which are cache fields being set lazily.<br>
      * Prominent example being {@link String} class with its hash code cache field. Due to the importance
      * of the {@link String} class, it is included in the default bypasses classes. Usually, if you use
      * your own set of classes here, remember to include {@link String} class, too.</p>
      * @param bypassReflectionClasses  classes to bypass reflection test
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @see #setTestRecursive(boolean)
      * @since 3.8
      */
@@ -277,7 +264,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     /**
      * Set the superclass to reflect up to at reflective tests.
      * @param reflectUpToClass the super class to reflect up to
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @since 3.6
      */
     public EqualsBuilder setReflectUpToClass(final Class<?> reflectUpToClass) {
@@ -288,7 +275,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     /**
      * Set field names to be excluded by reflection tests.
      * @param excludeFields the fields to exclude
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @since 3.6
      */
     public EqualsBuilder setExcludeFields(final String... excludeFields) {
@@ -298,8 +285,8 @@ public class EqualsBuilder implements Builder<Boolean> {
 
 
     /**
-     * <p>This method uses reflection to determine if the two {@link Object}s
-     * are equal.</p>
+     * This method uses reflection to determine if the two {@link Object}s
+     * are equal.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -324,8 +311,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>This method uses reflection to determine if the two {@link Object}s
-     * are equal.</p>
+     * This method uses reflection to determine if the two {@link Object}s
+     * are equal.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -350,8 +337,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>This method uses reflection to determine if the two {@link Object}s
-     * are equal.</p>
+     * This method uses reflection to determine if the two {@link Object}s
+     * are equal.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -377,8 +364,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>This method uses reflection to determine if the two {@link Object}s
-     * are equal.</p>
+     * This method uses reflection to determine if the two {@link Object}s
+     * are equal.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -411,8 +398,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>This method uses reflection to determine if the two {@link Object}s
-     * are equal.</p>
+     * This method uses reflection to determine if the two {@link Object}s
+     * are equal.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -464,7 +451,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Tests if two {@code objects} by using reflection.</p>
+     * Tests if two {@code objects} by using reflection.
      *
      * <p>It uses {@code AccessibleObject.setAccessible} to gain access to private
      * fields. This means that it will throw a security exception if run under
@@ -488,7 +475,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param lhs  the left-hand object
      * @param rhs  the right-hand object
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder reflectionAppend(final Object lhs, final Object rhs) {
         if (!isEquals) {
@@ -553,8 +540,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Appends the fields and values defined by the given object of the
-     * given Class.</p>
+     * Appends the fields and values defined by the given object of the
+     * given Class.
      *
      * @param lhs  the left-hand object
      * @param rhs  the right-hand object
@@ -574,19 +561,13 @@ public class EqualsBuilder implements Builder<Boolean> {
             final Field[] fields = clazz.getDeclaredFields();
             AccessibleObject.setAccessible(fields, true);
             for (int i = 0; i < fields.length && isEquals; i++) {
-                final Field f = fields[i];
-                if (!ArrayUtils.contains(excludeFields, f.getName())
-                    && !f.getName().contains("$")
-                    && (testTransients || !Modifier.isTransient(f.getModifiers()))
-                    && !Modifier.isStatic(f.getModifiers())
-                    && !f.isAnnotationPresent(EqualsExclude.class)) {
-                    try {
-                        append(f.get(lhs), f.get(rhs));
-                    } catch (final IllegalAccessException e) {
-                        //this can't happen. Would get a Security exception instead
-                        //throw a runtime exception in case the impossible happens.
-                        throw new InternalError("Unexpected IllegalAccessException");
-                    }
+                final Field field = fields[i];
+                if (!ArrayUtils.contains(excludeFields, field.getName())
+                    && !field.getName().contains("$")
+                    && (testTransients || !Modifier.isTransient(field.getModifiers()))
+                    && !Modifier.isStatic(field.getModifiers())
+                    && !field.isAnnotationPresent(EqualsExclude.class)) {
+                    append(Reflection.getUnchecked(field, lhs), Reflection.getUnchecked(field, rhs));
                 }
             }
         } finally {
@@ -595,10 +576,10 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Adds the result of {@code super.equals()} to this builder.</p>
+     * Adds the result of {@code super.equals()} to this builder.
      *
      * @param superEquals  the result of calling {@code super.equals()}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      * @since 2.0
      */
     public EqualsBuilder appendSuper(final boolean superEquals) {
@@ -610,15 +591,15 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@link Object}s are equal using either
+     * Test if two {@link Object}s are equal using either
      * #{@link #reflectionAppend(Object, Object)}, if object are non
      * primitives (or wrapper of primitives) or if field {@code testRecursive}
      * is set to {@code false}. Otherwise, using their
-     * {@code equals} method.</p>
+     * {@code equals} method.
      *
      * @param lhs  the left-hand object
      * @param rhs  the right-hand object
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final Object lhs, final Object rhs) {
         if (!isEquals) {
@@ -646,7 +627,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if an {@link Object} is equal to an array.</p>
+     * Test if an {@link Object} is equal to an array.
      *
      * @param lhs  the left-hand object, an array
      * @param rhs  the right-hand object
@@ -680,15 +661,13 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>
      * Test if two {@code long} s are equal.
-     * </p>
      *
      * @param lhs
      *                  the left-hand {@code long}
      * @param rhs
      *                  the right-hand {@code long}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final long lhs, final long rhs) {
         if (!isEquals) {
@@ -699,11 +678,11 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code int}s are equal.</p>
+     * Test if two {@code int}s are equal.
      *
      * @param lhs  the left-hand {@code int}
      * @param rhs  the right-hand {@code int}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final int lhs, final int rhs) {
         if (!isEquals) {
@@ -714,11 +693,11 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code short}s are equal.</p>
+     * Test if two {@code short}s are equal.
      *
      * @param lhs  the left-hand {@code short}
      * @param rhs  the right-hand {@code short}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final short lhs, final short rhs) {
         if (!isEquals) {
@@ -729,11 +708,11 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code char}s are equal.</p>
+     * Test if two {@code char}s are equal.
      *
      * @param lhs  the left-hand {@code char}
      * @param rhs  the right-hand {@code char}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final char lhs, final char rhs) {
         if (!isEquals) {
@@ -744,11 +723,11 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code byte}s are equal.</p>
+     * Test if two {@code byte}s are equal.
      *
      * @param lhs  the left-hand {@code byte}
      * @param rhs  the right-hand {@code byte}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final byte lhs, final byte rhs) {
         if (!isEquals) {
@@ -759,8 +738,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code double}s are equal by testing that the
-     * pattern of bits returned by {@code doubleToLong} are equal.</p>
+     * Test if two {@code double}s are equal by testing that the
+     * pattern of bits returned by {@code doubleToLong} are equal.
      *
      * <p>This handles NaNs, Infinities, and {@code -0.0}.</p>
      *
@@ -769,7 +748,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param lhs  the left-hand {@code double}
      * @param rhs  the right-hand {@code double}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final double lhs, final double rhs) {
         if (!isEquals) {
@@ -779,8 +758,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code float}s are equal by testing that the
-     * pattern of bits returned by doubleToLong are equal.</p>
+     * Test if two {@code float}s are equal by testing that the
+     * pattern of bits returned by doubleToLong are equal.
      *
      * <p>This handles NaNs, Infinities, and {@code -0.0}.</p>
      *
@@ -789,7 +768,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param lhs  the left-hand {@code float}
      * @param rhs  the right-hand {@code float}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final float lhs, final float rhs) {
         if (!isEquals) {
@@ -799,11 +778,11 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Test if two {@code booleans}s are equal.</p>
+     * Test if two {@code booleans}s are equal.
      *
      * @param lhs  the left-hand {@code boolean}
      * @param rhs  the right-hand {@code boolean}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
       */
     public EqualsBuilder append(final boolean lhs, final boolean rhs) {
         if (!isEquals) {
@@ -814,7 +793,7 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Performs a deep comparison of two {@link Object} arrays.</p>
+     * Performs a deep comparison of two {@link Object} arrays.
      *
      * <p>This also will be called for the top level of
      * multi-dimensional, ragged, and multi-typed arrays.</p>
@@ -824,7 +803,7 @@ public class EqualsBuilder implements Builder<Boolean> {
      *
      * @param lhs  the left-hand {@code Object[]}
      * @param rhs  the right-hand {@code Object[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final Object[] lhs, final Object[] rhs) {
         if (!isEquals) {
@@ -848,14 +827,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code long}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code long}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(long, long)} is used.</p>
      *
      * @param lhs  the left-hand {@code long[]}
      * @param rhs  the right-hand {@code long[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final long[] lhs, final long[] rhs) {
         if (!isEquals) {
@@ -879,14 +858,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code int}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code int}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(int, int)} is used.</p>
      *
      * @param lhs  the left-hand {@code int[]}
      * @param rhs  the right-hand {@code int[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final int[] lhs, final int[] rhs) {
         if (!isEquals) {
@@ -910,14 +889,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code short}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code short}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(short, short)} is used.</p>
      *
      * @param lhs  the left-hand {@code short[]}
      * @param rhs  the right-hand {@code short[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final short[] lhs, final short[] rhs) {
         if (!isEquals) {
@@ -941,14 +920,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code char}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code char}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(char, char)} is used.</p>
      *
      * @param lhs  the left-hand {@code char[]}
      * @param rhs  the right-hand {@code char[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final char[] lhs, final char[] rhs) {
         if (!isEquals) {
@@ -972,14 +951,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code byte}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code byte}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(byte, byte)} is used.</p>
      *
      * @param lhs  the left-hand {@code byte[]}
      * @param rhs  the right-hand {@code byte[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final byte[] lhs, final byte[] rhs) {
         if (!isEquals) {
@@ -1003,14 +982,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code double}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code double}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(double, double)} is used.</p>
      *
      * @param lhs  the left-hand {@code double[]}
      * @param rhs  the right-hand {@code double[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final double[] lhs, final double[] rhs) {
         if (!isEquals) {
@@ -1034,14 +1013,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code float}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code float}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(float, float)} is used.</p>
      *
      * @param lhs  the left-hand {@code float[]}
      * @param rhs  the right-hand {@code float[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final float[] lhs, final float[] rhs) {
         if (!isEquals) {
@@ -1065,14 +1044,14 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Deep comparison of array of {@code boolean}. Length and all
-     * values are compared.</p>
+     * Deep comparison of array of {@code boolean}. Length and all
+     * values are compared.
      *
      * <p>The method {@link #append(boolean, boolean)} is used.</p>
      *
      * @param lhs  the left-hand {@code boolean[]}
      * @param rhs  the right-hand {@code boolean[]}
-     * @return EqualsBuilder - used to chain calls.
+     * @return this
      */
     public EqualsBuilder append(final boolean[] lhs, final boolean[] rhs) {
         if (!isEquals) {
@@ -1096,8 +1075,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Returns {@code true} if the fields that have been checked
-     * are all equal.</p>
+     * Returns {@code true} if the fields that have been checked
+     * are all equal.
      *
      * @return boolean
      */
@@ -1106,8 +1085,8 @@ public class EqualsBuilder implements Builder<Boolean> {
     }
 
     /**
-     * <p>Returns {@code true} if the fields that have been checked
-     * are all equal.</p>
+     * Returns {@code true} if the fields that have been checked
+     * are all equal.
      *
      * @return {@code true} if all of the fields that have been checked
      *         are equal, {@code false} otherwise.

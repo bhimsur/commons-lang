@@ -19,9 +19,9 @@ package org.apache.commons.lang3;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
- * <p>An enum representing all the versions of the Java specification.
+ * An enum representing all the versions of the Java specification.
  * This is intended to mirror available values from the
- * <em>java.specification.version</em> System property. </p>
+ * <em>java.specification.version</em> System property.
  *
  * @since 3.0
  */
@@ -151,6 +151,27 @@ public enum JavaVersion {
     JAVA_18(18.0f, "18"),
 
     /**
+     * Java 19.
+     *
+     * @since 3.13.0
+     */
+    JAVA_19(19.0f, "19"),
+
+    /**
+     * Java 20.
+     *
+     * @since 3.13.0
+     */
+    JAVA_20(20, "20"),
+
+    /**
+     * Java 21.
+     *
+     * @since 3.13.0
+     */
+    JAVA_21(21, "21"),
+
+    /**
      * The most recent java version. Mainly introduced to avoid to break when a new version of Java is used.
      */
     JAVA_RECENT(maxVersion(), Float.toString(maxVersion()));
@@ -177,7 +198,7 @@ public enum JavaVersion {
     }
 
     /**
-     * <p>Whether this version of Java is at least the version of Java passed in.</p>
+     * Whether this version of Java is at least the version of Java passed in.
      *
      * <p>For example:<br>
      *  {@code myVersion.atLeast(JavaVersion.JAVA_1_4)}</p>
@@ -190,7 +211,7 @@ public enum JavaVersion {
     }
 
     /**
-     * <p>Whether this version of Java is at most the version of Java passed in.</p>
+     * Whether this version of Java is at most the version of Java passed in.
      *
      * <p>For example:<br>
      *  {@code myVersion.atMost(JavaVersion.JAVA_1_4)}</p>
@@ -269,6 +290,12 @@ public enum JavaVersion {
             return JAVA_17;
         case "18":
             return JAVA_18;
+        case "19":
+            return JAVA_19;
+        case "20":
+            return JAVA_20;
+        case "21":
+            return JAVA_21;
         default:
             final float v = toFloatVersion(versionStr);
             if ((v - 1.) < 1.) { // then we need to check decimals > .9
@@ -285,7 +312,7 @@ public enum JavaVersion {
     }
 
     /**
-     * <p>The string value is overridden to return the standard name.</p>
+     * The string value is overridden to return the standard name.
      *
      * <p>For example, {@code "1.5"}.</p>
      *

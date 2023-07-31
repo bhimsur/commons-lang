@@ -22,9 +22,8 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * <p>
  * An exception that provides an easy and safe way to add contextual information.
- * </p><p>
+ * <p>
  * An exception trace itself is often insufficient to provide rapid diagnosis of the issue.
  * Frequently what is needed is a select few pieces of local contextual data.
  * Providing this data is tricky however, due to concerns over formatting and nulls.
@@ -225,7 +224,7 @@ public class ContextedException extends Exception implements ExceptionContext {
     /**
      * Provides the message explaining the exception, including the contextual data.
      *
-     * @see java.lang.Throwable#getMessage()
+     * @see Throwable#getMessage()
      * @return the message, never null
      */
     @Override
@@ -236,7 +235,7 @@ public class ContextedException extends Exception implements ExceptionContext {
     /**
      * Provides the message explaining the exception without the contextual data.
      *
-     * @see java.lang.Throwable#getMessage()
+     * @see Throwable#getMessage()
      * @return the message
      * @since 3.0.1
      */

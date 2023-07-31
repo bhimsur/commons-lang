@@ -643,15 +643,15 @@ public class ArrayUtils {
      * @param array  the array to add the element to, may be {@code null}
      * @param index  the position of the new object
      * @param element  the object to add
-     * @param clss the type of the element being added
+     * @param clazz the type of the element being added
      * @return A new array containing the existing elements and the new element
      */
-    private static Object add(final Object array, final int index, final Object element, final Class<?> clss) {
+    private static Object add(final Object array, final int index, final Object element, final Class<?> clazz) {
         if (array == null) {
             if (index != 0) {
                 throw new IndexOutOfBoundsException("Index: " + index + ", Length: 0");
             }
-            final Object joinedArray = Array.newInstance(clss, 1);
+            final Object joinedArray = Array.newInstance(clazz, 1);
             Array.set(joinedArray, 0, element);
             return joinedArray;
         }
@@ -659,7 +659,7 @@ public class ArrayUtils {
         if (index > length || index < 0) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
         }
-        final Object result = Array.newInstance(clss, length + 1);
+        final Object result = Array.newInstance(clazz, length + 1);
         System.arraycopy(array, 0, result, 0, index);
         Array.set(result, index, element);
         if (index < length) {
@@ -767,15 +767,15 @@ public class ArrayUtils {
      */
     @Deprecated
     public static <T> T[] add(final T[] array, final int index, final T element) {
-        final Class<T> clss;
+        final Class<T> clazz;
         if (array != null) {
-            clss = getComponentType(array);
+            clazz = getComponentType(array);
         } else if (element != null) {
-            clss = ObjectUtils.getClass(element);
+            clazz = ObjectUtils.getClass(element);
         } else {
             throw new IllegalArgumentException("Array and element cannot both be null");
         }
-        return (T[]) add(array, index, element, clss);
+        return (T[]) add(array, index, element, clazz);
     }
 
 
@@ -1377,10 +1377,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static boolean[] clone(final boolean[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1394,10 +1391,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static byte[] clone(final byte[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1411,10 +1405,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static char[] clone(final char[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1428,10 +1419,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static double[] clone(final double[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1445,10 +1433,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static float[] clone(final float[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1462,10 +1447,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static int[] clone(final int[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1479,10 +1461,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static long[] clone(final long[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1496,10 +1475,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static short[] clone(final short[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1518,10 +1494,7 @@ public class ArrayUtils {
      * @return the cloned array, {@code null} if {@code null} input
      */
     public static <T> T[] clone(final T[] array) {
-        if (array == null) {
-            return null;
-        }
-        return array.clone();
+        return array != null ? array.clone() : null;
     }
 
     /**
@@ -1656,6 +1629,20 @@ public class ArrayUtils {
     }
 
     /**
+     * Checks if the value is in the given array.
+     * <p>
+     * The method returns {@code false} if a {@code null} array is passed in.
+     * </p>
+     *
+     * @param array  the array to search through
+     * @param valueToFind  the value to find
+     * @return {@code true} if the array contains the object
+     */
+    public static boolean contains(final short[] array, final short valueToFind) {
+        return indexOf(array, valueToFind) != INDEX_NOT_FOUND;
+    }
+
+    /**
      * Checks if any of the objects are in the given array.
      * <p>
      * The method returns {@code false} if a {@code null} array is passed in.
@@ -1668,20 +1655,6 @@ public class ArrayUtils {
      */
     public static boolean containsAny(final Object[] array, final Object... objectsToFind) {
         return Streams.of(objectsToFind).anyMatch(e -> contains(array, e));
-    }
-
-    /**
-     * Checks if the value is in the given array.
-     * <p>
-     * The method returns {@code false} if a {@code null} array is passed in.
-     * </p>
-     *
-     * @param array  the array to search through
-     * @param valueToFind  the value to find
-     * @return {@code true} if the array contains the object
-     */
-    public static boolean contains(final short[] array, final short valueToFind) {
-        return indexOf(array, valueToFind) != INDEX_NOT_FOUND;
     }
 
     /**
@@ -1763,10 +1736,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static int getLength(final Object array) {
-        if (array == null) {
-            return 0;
-        }
-        return Array.getLength(array);
+        return array != null ? Array.getLength(array) : 0;
     }
 
     /**
@@ -2508,7 +2478,7 @@ public class ArrayUtils {
         final boolean searchNaN = Double.isNaN(valueToFind);
         for (int i = startIndex; i < array.length; i++) {
             final double element = array[i];
-            if (valueToFind == element || (searchNaN && Double.isNaN(element))) {
+            if (valueToFind == element || searchNaN && Double.isNaN(element)) {
                 return i;
             }
         }
@@ -2592,7 +2562,7 @@ public class ArrayUtils {
         final boolean searchNaN = Float.isNaN(valueToFind);
         for (int i = startIndex; i < array.length; i++) {
             final float element = array[i];
-            if (valueToFind == element || (searchNaN && Float.isNaN(element))) {
+            if (valueToFind == element || searchNaN && Float.isNaN(element)) {
                 return i;
             }
         }
@@ -2805,7 +2775,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -2847,7 +2817,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -2889,7 +2859,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -2931,7 +2901,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -2973,7 +2943,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -3015,7 +2985,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -3057,7 +3027,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -3099,7 +3069,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -3142,7 +3112,7 @@ public class ArrayUtils {
      * @param index the position within {@code array} to insert the new values
      * @param array the array to insert the values into, may be {@code null}
      * @param values the new values to insert, may be {@code null}
-     * @return The new array.
+     * @return The new array or {@code null} if the given array is {@code null}.
      * @throws IndexOutOfBoundsException if {@code array} is provided
      * and either {@code index < 0} or {@code index > array.length}
      * @since 3.6
@@ -3182,6 +3152,16 @@ public class ArrayUtils {
     }
 
     /**
+     * Checks if an array is empty or {@code null}.
+     *
+     * @param array the array to test
+     * @return {@code true} if the array is empty or {@code null}
+     */
+    private static boolean isArrayEmpty(final Object array) {
+        return getLength(array) == 0;
+    }
+
+    /**
      * Returns whether a given array can safely be accessed at the given index.
      *
      * <pre>
@@ -3208,7 +3188,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final boolean[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3219,7 +3199,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final byte[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3230,7 +3210,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final char[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3241,7 +3221,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final double[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3252,7 +3232,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final float[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3263,7 +3243,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final int[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3274,7 +3254,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final long[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3285,7 +3265,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final Object[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3296,7 +3276,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static boolean isEmpty(final short[] array) {
-        return getLength(array) == 0;
+        return isArrayEmpty(array);
     }
 
     /**
@@ -3580,7 +3560,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final boolean[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3605,7 +3585,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final byte[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3630,7 +3610,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final char[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3655,7 +3635,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final double[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3680,7 +3660,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final float[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3705,7 +3685,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final int[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3730,7 +3710,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final long[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3755,7 +3735,7 @@ public class ArrayUtils {
      * @since 3.4
      */
     public static boolean isSorted(final short[] array) {
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
 
@@ -3792,11 +3772,12 @@ public class ArrayUtils {
      * @param comparator the {@link Comparator} to compare over
      * @param <T> the datatype of the array
      * @return whether the array is sorted
+     * @throws NullPointerException if {@code comparator} is {@code null}
      * @since 3.4
      */
     public static <T> boolean isSorted(final T[] array, final Comparator<T> comparator) {
         Objects.requireNonNull(comparator, "comparator");
-        if (array == null || array.length < 2) {
+        if (getLength(array) < 2) {
             return true;
         }
         T previous = array[0];
@@ -4323,10 +4304,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static boolean[] nullToEmpty(final boolean[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_BOOLEAN_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_BOOLEAN_ARRAY : array;
     }
 
     /**
@@ -4345,10 +4323,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Boolean[] nullToEmpty(final Boolean[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_BOOLEAN_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_BOOLEAN_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4367,10 +4342,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static byte[] nullToEmpty(final byte[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_BYTE_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_BYTE_ARRAY : array;
     }
 
     /**
@@ -4389,10 +4361,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Byte[] nullToEmpty(final Byte[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_BYTE_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_BYTE_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4411,10 +4380,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static char[] nullToEmpty(final char[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_CHAR_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_CHAR_ARRAY : array;
     }
 
     /**
@@ -4433,10 +4399,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Character[] nullToEmpty(final Character[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_CHARACTER_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_CHARACTER_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4455,10 +4418,7 @@ public class ArrayUtils {
      * @since 3.2
      */
     public static Class<?>[] nullToEmpty(final Class<?>[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_CLASS_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_CLASS_ARRAY : array;
     }
 
     /**
@@ -4477,10 +4437,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static double[] nullToEmpty(final double[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_DOUBLE_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_DOUBLE_ARRAY : array;
     }
 
     /**
@@ -4499,10 +4456,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Double[] nullToEmpty(final Double[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_DOUBLE_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_DOUBLE_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4521,10 +4475,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static float[] nullToEmpty(final float[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_FLOAT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_FLOAT_ARRAY : array;
     }
 
     /**
@@ -4543,10 +4494,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Float[] nullToEmpty(final Float[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_FLOAT_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_FLOAT_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4565,10 +4513,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static int[] nullToEmpty(final int[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_INT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_INT_ARRAY : array;
     }
 
     /**
@@ -4587,10 +4532,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Integer[] nullToEmpty(final Integer[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_INTEGER_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_INTEGER_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4609,10 +4551,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static long[] nullToEmpty(final long[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_LONG_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_LONG_ARRAY : array;
     }
 
     /**
@@ -4631,10 +4570,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Long[] nullToEmpty(final Long[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_LONG_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_LONG_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4653,10 +4589,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Object[] nullToEmpty(final Object[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4675,10 +4608,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static short[] nullToEmpty(final short[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_SHORT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_SHORT_ARRAY : array;
     }
 
     /**
@@ -4697,10 +4627,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static Short[] nullToEmpty(final Short[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_SHORT_OBJECT_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_SHORT_OBJECT_ARRAY : array;
     }
 
     /**
@@ -4719,10 +4646,7 @@ public class ArrayUtils {
      * @since 2.5
      */
     public static String[] nullToEmpty(final String[] array) {
-        if (isEmpty(array)) {
-            return EMPTY_STRING_ARRAY;
-        }
-        return array;
+        return isEmpty(array) ? EMPTY_STRING_ARRAY : array;
     }
 
     /**
@@ -5857,10 +5781,7 @@ public class ArrayUtils {
      */
     public static boolean[] removeElement(final boolean[] array, final boolean element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -5890,10 +5811,7 @@ public class ArrayUtils {
      */
     public static byte[] removeElement(final byte[] array, final byte element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -5923,10 +5841,7 @@ public class ArrayUtils {
      */
     public static char[] removeElement(final char[] array, final char element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -5956,10 +5871,7 @@ public class ArrayUtils {
      */
     public static double[] removeElement(final double[] array, final double element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -5989,10 +5901,7 @@ public class ArrayUtils {
      */
     public static float[] removeElement(final float[] array, final float element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -6022,10 +5931,7 @@ public class ArrayUtils {
      */
     public static int[] removeElement(final int[] array, final int element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -6055,10 +5961,7 @@ public class ArrayUtils {
      */
     public static long[] removeElement(final long[] array, final long element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -6088,10 +5991,7 @@ public class ArrayUtils {
      */
     public static short[] removeElement(final short[] array, final short element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -6122,10 +6022,7 @@ public class ArrayUtils {
      */
     public static <T> T[] removeElement(final T[] array, final Object element) {
         final int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-        return remove(array, index);
+        return index == INDEX_NOT_FOUND ? clone(array) : remove(array, index);
     }
 
     /**
@@ -6682,10 +6579,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final byte[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6729,10 +6625,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final char[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6776,10 +6671,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final double[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6823,10 +6717,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final float[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6870,10 +6763,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final int[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6917,10 +6809,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final long[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -6967,10 +6858,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final Object[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -7014,10 +6904,9 @@ public class ArrayUtils {
      * @param array  the array to reverse, may be {@code null}
      */
     public static void reverse(final short[] array) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            reverse(array, 0, array.length);
         }
-        reverse(array, 0, array.length);
     }
 
     /**
@@ -7107,10 +6996,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final boolean[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7153,18 +7041,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7183,10 +7071,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final byte[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7229,18 +7116,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7259,10 +7146,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final char[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7305,18 +7191,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7335,10 +7221,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final double[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7381,18 +7266,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7411,10 +7296,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final float[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7457,18 +7341,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7487,10 +7371,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final int[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7533,18 +7416,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7563,10 +7446,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final long[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7609,18 +7491,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7639,10 +7521,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final Object[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7685,18 +7566,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -7715,10 +7596,9 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final short[] array, final int offset) {
-        if (array == null) {
-            return;
+        if (array != null) {
+            shift(array, 0, array.length, offset);
         }
-        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -7761,18 +7641,18 @@ public class ArrayUtils {
         // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
         // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
         while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
+            final int nOffset = n - offset;
 
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+            if (offset > nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - nOffset,  nOffset);
                 n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                offset -= nOffset;
+            } else if (offset < nOffset) {
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset,  offset);
                 startIndexInclusive += offset;
-                n = n_offset;
+                n = nOffset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                swap(array, startIndexInclusive, startIndexInclusive + nOffset, offset);
                 break;
             }
         }
@@ -8403,9 +8283,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final boolean[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8474,9 +8351,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final byte[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8544,9 +8418,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final char[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8614,9 +8485,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final double[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8684,9 +8552,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final float[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8755,9 +8620,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final int[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8819,16 +8681,12 @@ public class ArrayUtils {
      *     <li>ArrayUtils.swap([true, false, true], -1, 1) -&gt; [false, true, true]</li>
      * </ul>
      *
-     *
      * @param array  the array to swap, may be {@code null}
      * @param offset1 the index of the first element to swap
      * @param offset2 the index of the second element to swap
      * @since 3.5
      */
     public static void swap(final long[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8896,9 +8754,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final Object[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -8966,9 +8821,6 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final short[] array, final int offset1, final int offset2) {
-        if (isEmpty(array)) {
-            return;
-        }
         swap(array, offset1, offset2, 1);
     }
 
@@ -9054,7 +8906,7 @@ public class ArrayUtils {
      * @param  <T>   the array's element type
      * @param  items  the varargs array items, null allowed
      * @return the array, not null unless a null array is passed in
-     * @since  3.0
+     * @since 3.0
      */
     public static <T> T[] toArray(@SuppressWarnings("unchecked") final T... items) {
         return items;

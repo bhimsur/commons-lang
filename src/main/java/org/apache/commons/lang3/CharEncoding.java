@@ -21,16 +21,16 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 
 /**
- * <p>Character encoding names required of every implementation of the Java platform.</p>
+ * Character encoding names required of every implementation of the Java platform.
  *
- * <p>According to <a href="http://docs.oracle.com/javase/1.3/docs/api/java/lang/package-summary.html#charenc">JRE character
+ * <p>According to <a href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html">JRE character
  * encoding names</a>:</p>
  *
  * <p><cite>Every implementation of the Java platform is required to support the following character encodings.
  * Consult the release documentation for your implementation to see if any other encodings are supported.
  * </cite></p>
  *
- * @see <a href="http://docs.oracle.com/javase/6/docs/technotes/guides/intl/encoding.doc.html">JRE character encoding names</a>
+ * @see <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/intl/encoding.doc.html">JRE character encoding names</a>
  * @since 2.1
  * @deprecated Java 7 introduced {@link java.nio.charset.StandardCharsets}, which defines these constants as
  * {@link Charset} objects. Use {@link Charset#name()} to get the string values provided in this class.
@@ -40,54 +40,54 @@ import java.nio.charset.IllegalCharsetNameException;
 public class CharEncoding {
 
     /**
-     * <p>ISO Latin Alphabet #1, also known as ISO-LATIN-1.</p>
+     * ISO Latin Alphabet #1, also known as ISO-LATIN-1.
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String ISO_8859_1 = "ISO-8859-1";
 
     /**
-     * <p>Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block
-     * of the Unicode character set.</p>
+     * Seven-bit ASCII, also known as ISO646-US, also known as the Basic Latin block
+     * of the Unicode character set.
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String US_ASCII = "US-ASCII";
 
     /**
-     * <p>Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial
-     * byte-order mark (either order accepted on input, big-endian used on output).</p>
+     * Sixteen-bit Unicode Transformation Format, byte order specified by a mandatory initial
+     * byte-order mark (either order accepted on input, big-endian used on output).
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String UTF_16 = "UTF-16";
 
     /**
-     * <p>Sixteen-bit Unicode Transformation Format, big-endian byte order.</p>
+     * Sixteen-bit Unicode Transformation Format, big-endian byte order.
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String UTF_16BE = "UTF-16BE";
 
     /**
-     * <p>Sixteen-bit Unicode Transformation Format, little-endian byte order.</p>
+     * Sixteen-bit Unicode Transformation Format, little-endian byte order.
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String UTF_16LE = "UTF-16LE";
 
     /**
-     * <p>Eight-bit Unicode Transformation Format.</p>
+     * Eight-bit Unicode Transformation Format.
      *
      * <p>Every implementation of the Java platform is required to support this character encoding.</p>
      */
     public static final String UTF_8 = "UTF-8";
 
     /**
-     * <p>Returns whether the named charset is supported.</p>
+     * Returns whether the named charset is supported.
      *
      * <p>This is similar to <a
-     * href="http://docs.oracle.com/javase/6/docs/api/java/nio/charset/Charset.html#isSupported%28java.lang.String%29">
+     * href="https://docs.oracle.com/javase/8/docs/api/java/nio/charset/Charset.html#isSupported%28java.lang.String%29">
      * java.nio.charset.Charset.isSupported(String)</a> but handles more formats</p>
      *
      * @param name  the name of the requested charset; may be either a canonical name or an alias, null returns false

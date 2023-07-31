@@ -19,10 +19,9 @@ package org.apache.commons.lang3.concurrent;
 import java.util.Objects;
 
 /**
- * <p>
  * A very simple implementation of the {@link ConcurrentInitializer} interface
  * which always returns the same object.
- * </p>
+ *
  * <p>
  * An instance of this class is passed a reference to an object when it is
  * constructed. The {@link #get()} method just returns this object. No
@@ -38,6 +37,7 @@ import java.util.Objects;
  * @param <T> the type of the object managed by this initializer
  */
 public class ConstantInitializer<T> implements ConcurrentInitializer<T> {
+
     /** Constant for the format of the string representation. */
     private static final String FMT_TO_STRING = "ConstantInitializer@%d [ object = %s ]";
 
@@ -88,7 +88,7 @@ public class ConstantInitializer<T> implements ConcurrentInitializer<T> {
      */
     @Override
     public int hashCode() {
-        return getObject() != null ? getObject().hashCode() : 0;
+        return Objects.hashCode(object);
     }
 
     /**

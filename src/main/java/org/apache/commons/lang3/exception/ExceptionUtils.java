@@ -42,12 +42,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ExceptionUtils {
 
-    private static final int NOT_FOUND = -1;
-
     /**
      * The names of methods commonly used to access a wrapped exception.
      */
-    // TODO: Remove in Lang 4.0
+    // TODO: Remove in Lang 4
     private static final String[] CAUSE_METHOD_NAMES = {
         "getCause",
         "getNextException",
@@ -62,6 +60,8 @@ public class ExceptionUtils {
         "getLinkedCause",
         "getThrowable",
     };
+
+    private static final int NOT_FOUND = -1;
 
     /**
      * Used when printing stack frames to denote the start of a
@@ -80,6 +80,26 @@ public class ExceptionUtils {
     @SuppressWarnings("unchecked")
     private static <R, T extends Throwable> R eraseType(final Throwable throwable) throws T {
         throw (T) throwable;
+    }
+
+    /**
+     * Performs an action for each Throwable causes of the given Throwable.
+     * <p>
+     * A throwable without cause will return a stream containing one element - the input throwable. A throwable with one cause
+     * will return a stream containing two elements. - the input throwable and the cause throwable. A {@code null} throwable
+     * will return a stream of count zero.
+     * </p>
+     *
+     * <p>
+     * This method handles recursive cause structures that might otherwise cause infinite loops. The cause chain is
+     * processed until the end is reached, or until the next item in the chain is already in the result set.
+     * </p>
+     * @param throwable The Throwable to traverse.
+     * @param consumer a non-interfering action to perform on the elements.
+     * @since 3.13.0
+     */
+    public static void forEach(final Throwable throwable, final Consumer<Throwable> consumer) {
+        stream(throwable).forEach(consumer);
     }
 
     /**
@@ -108,7 +128,7 @@ public class ExceptionUtils {
      * @return the cause of the {@link Throwable},
      *  {@code null} if none found or null throwable input
      * @since 1.0
-     * @deprecated This feature will be removed in Lang 4.0, use {@link Throwable#getCause} instead
+     * @deprecated This feature will be removed in Lang 4, use {@link Throwable#getCause} instead
      */
     @Deprecated
     public static Throwable getCause(final Throwable throwable) {
@@ -126,33 +146,21 @@ public class ExceptionUtils {
      * @return the cause of the {@link Throwable},
      *  {@code null} if none found or null throwable input
      * @since 1.0
-     * @deprecated This feature will be removed in Lang 4.0, use {@link Throwable#getCause} instead
+     * @deprecated This feature will be removed in Lang 4, use {@link Throwable#getCause} instead
      */
     @Deprecated
     public static Throwable getCause(final Throwable throwable, String[] methodNames) {
         if (throwable == null) {
             return null;
         }
-
         if (methodNames == null) {
             final Throwable cause = throwable.getCause();
             if (cause != null) {
                 return cause;
             }
-
             methodNames = CAUSE_METHOD_NAMES;
         }
-
-        for (final String methodName : methodNames) {
-            if (methodName != null) {
-                final Throwable legacyCause = getCauseUsingMethodName(throwable, methodName);
-                if (legacyCause != null) {
-                    return legacyCause;
-                }
-            }
-        }
-
-        return null;
+        return Stream.of(methodNames).map(m -> getCauseUsingMethodName(throwable, m)).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
     /**
@@ -162,20 +170,22 @@ public class ExceptionUtils {
      * @param methodName  the name of the method to find and invoke
      * @return the wrapped exception, or {@code null} if not found
      */
-    // TODO: Remove in Lang 4.0
+    // TODO: Remove in Lang 4
     private static Throwable getCauseUsingMethodName(final Throwable throwable, final String methodName) {
-        Method method = null;
-        try {
-            method = throwable.getClass().getMethod(methodName);
-        } catch (final NoSuchMethodException | SecurityException ignored) { // NOPMD
-            // exception ignored
-        }
-
-        if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
+        if (methodName != null) {
+            Method method = null;
             try {
-                return (Throwable) method.invoke(throwable);
-            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) { // NOPMD
+                method = throwable.getClass().getMethod(methodName);
+            } catch (final NoSuchMethodException | SecurityException ignored) {
                 // exception ignored
+            }
+
+            if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
+                try {
+                    return (Throwable) method.invoke(throwable);
+                } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) {
+                    // exception ignored
+                }
             }
         }
         return null;
@@ -188,7 +198,7 @@ public class ExceptionUtils {
      *
      * @return cloned array of the default method names
      * @since 3.0
-     * @deprecated This feature will be removed in Lang 4.0
+     * @deprecated This feature will be removed in Lang 4
      */
     @Deprecated
     public static String[] getDefaultCauseMethodNames() {
@@ -248,9 +258,8 @@ public class ExceptionUtils {
      * @since 2.2
      */
     public static String getRootCauseMessage(final Throwable throwable) {
-        Throwable root = getRootCause(throwable);
-        root = root == null ? throwable : root;
-        return getMessage(root);
+        final Throwable root = getRootCause(throwable);
+        return getMessage(root == null ? throwable : root);
     }
 
     /**
@@ -446,26 +455,6 @@ public class ExceptionUtils {
     }
 
     /**
-     * Performs an action for each Throwable causes of the given Throwable.
-     * <p>
-     * A throwable without cause will return a stream containing one element - the input throwable. A throwable with one cause
-     * will return a stream containing two elements. - the input throwable and the cause throwable. A {@code null} throwable
-     * will return a stream of count zero.
-     * </p>
-     *
-     * <p>
-     * This method handles recursive cause structures that might otherwise cause infinite loops. The cause chain is
-     * processed until the end is reached, or until the next item in the chain is already in the result set.
-     * </p>
-     * @param throwable The Throwable to traverse.
-     * @param consumer a non-interfering action to perform on the elements.
-     * @since 3.13.0
-     */
-    public static void forEach(final Throwable throwable, final Consumer<Throwable> consumer) {
-        stream(throwable).forEach(consumer);
-    }
-
-    /**
      * Gets the list of {@link Throwable} objects in the
      * exception chain.
      *
@@ -629,6 +618,30 @@ public class ExceptionUtils {
      */
     public static int indexOfType(final Throwable throwable, final Class<? extends Throwable> type, final int fromIndex) {
         return indexOf(throwable, type, fromIndex, true);
+    }
+
+    /**
+     * Checks if a throwable represents a checked exception
+     *
+     * @param throwable
+     *            The throwable to check.
+     * @return True if the given Throwable is a checked exception.
+     * @since 3.13.0
+     */
+    public static boolean isChecked(final Throwable throwable) {
+        return throwable != null && !(throwable instanceof Error) && !(throwable instanceof RuntimeException);
+    }
+
+    /**
+     * Checks if a throwable represents an unchecked exception
+     *
+     * @param throwable
+     *            The throwable to check.
+     * @return True if the given Throwable is an unchecked exception.
+     * @since 3.13.0
+     */
+    public static boolean isUnchecked(final Throwable throwable) {
+        return throwable != null && (throwable instanceof Error || throwable instanceof RuntimeException);
     }
 
     /**
@@ -952,6 +965,25 @@ public class ExceptionUtils {
     }
 
     /**
+     * Tests whether the cause of the specified {@link Throwable}
+     * should be thrown and does it if necessary.
+     *
+     * @param <T> The Throwable type.
+     * @param throwable the throwable to test and throw or return.
+     * @return the given throwable.
+     * @since 3.13.0
+     */
+    public static <T> T throwUnchecked(final T throwable) {
+        if (throwable instanceof RuntimeException) {
+            throw (RuntimeException) throwable;
+        }
+        if (throwable instanceof Error) {
+            throw (Error) throwable;
+        }
+        return throwable;
+    }
+
+    /**
      * Throws a checked exception without adding the exception to the throws
      * clause of the calling method. For checked exceptions, this method throws
      * an UndeclaredThrowableException wrapping the checked exception. For
@@ -974,19 +1006,16 @@ public class ExceptionUtils {
      * @see #hasCause(Throwable, Class)
      */
     public static <R> R wrapAndThrow(final Throwable throwable) {
-        if (throwable instanceof RuntimeException) {
-            throw (RuntimeException) throwable;
-        }
-        if (throwable instanceof Error) {
-            throw (Error) throwable;
-        }
-        throw new UndeclaredThrowableException(throwable);
+        throw new UndeclaredThrowableException(throwUnchecked(throwable));
     }
 
     /**
      * Public constructor allows an instance of {@link ExceptionUtils} to be created, although that is not
      * normally necessary.
+     *
+     * @deprecated Will be private in 3.0.
      */
+    @Deprecated
     public ExceptionUtils() {
     }
 }

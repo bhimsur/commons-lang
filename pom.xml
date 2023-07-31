@@ -22,11 +22,11 @@
   <parent>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>53</version>
+    <version>59</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>commons-lang3</artifactId>
-  <version>3.13.0-SNAPSHOT</version>
+  <version>3.13.1-SNAPSHOT</version>
   <name>Apache Commons Lang</name>
 
   <inceptionYear>2001</inceptionYear>
@@ -47,7 +47,7 @@
     <connection>scm:git:http://gitbox.apache.org/repos/asf/commons-lang.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/commons-lang.git</developerConnection>
     <url>https://gitbox.apache.org/repos/asf?p=commons-lang.git</url>
-    <tag>commons-lang-3.12.0</tag>
+    <tag>rel/commons-lang-3.13.0</tag>
   </scm>
 
   <developers>
@@ -522,18 +522,6 @@
     </contributor>
   </contributors>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>5.8.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <!-- Lang should depend on very little -->
   <dependencies>
     <!-- testing -->
@@ -545,7 +533,7 @@
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
-      <version>1.7.1</version>
+      <version>1.9.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -558,7 +546,7 @@
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>4.3</version>
+      <version>5.1.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -566,7 +554,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-text</artifactId>
-      <version>1.9</version>
+      <version>1.10.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -619,7 +607,7 @@
     <commons.packageId>lang3</commons.packageId>
     <commons.module.name>org.apache.commons.lang3</commons.module.name>
     <!-- Current 3.x release series -->
-    <commons.release.version>3.13.0</commons.release.version>
+    <commons.release.version>3.13.1</commons.release.version>
     <commons.release.desc>(Java 8+)</commons.release.desc>
     <!-- Previous 2.x release series -->
     <commons.release.2.version>2.6</commons.release.2.version>
@@ -634,32 +622,17 @@
     <commons.scmPubCheckoutDirectory>site-content</commons.scmPubCheckoutDirectory>
     <commons.encoding>utf-8</commons.encoding>
 
-    <checkstyle.plugin.version>3.1.2</checkstyle.plugin.version>
-    <checkstyle.version>9.3</checkstyle.version>
     <checkstyle.configdir>src/site/resources/checkstyle</checkstyle.configdir>
 
-    <commons.spotbugs.plugin.version>4.7.1.0</commons.spotbugs.plugin.version>
-    <commons.spotbugs.impl.version>4.7.1</commons.spotbugs.impl.version>
     <japicmp.skip>false</japicmp.skip>
-    <clirr.skip>true</clirr.skip>
-
+    <!-- 0.6.0 requires Java 11 -->
+    <commons.spdx.version>0.5.5</commons.spdx.version>
     <!-- JMH Benchmark related properties, version, target compiler and name of the benchmarking uber jar. -->
-    <jmh.version>1.35</jmh.version>
+    <jmh.version>1.36</jmh.version>
     <uberjar.name>benchmarks</uberjar.name>
 
-    <commons.jacoco.version>0.8.8</commons.jacoco.version>
-    <commons.surefire.version>3.0.0-M7</commons.surefire.version>
-    <commons.javadoc.version>3.4.0</commons.javadoc.version>
-    <commons.japicmp.version>0.15.7</commons.japicmp.version>
-    <commons.pmd.version>3.17.0</commons.pmd.version>
-    <commons.pmd-impl.version>6.47.0</commons.pmd-impl.version>
-    <commons.felix.version>5.1.2</commons.felix.version>
-    <biz.aQute.bndlib.version>6.3.1</biz.aQute.bndlib.version>
-    <commons.animal-sniffer.version>1.21</commons.animal-sniffer.version>
-    <commons.rat.version>0.14</commons.rat.version>
-    
     <!-- Commons Release Plugin -->
-    <commons.bc.version>3.12.0</commons.bc.version>
+    <commons.bc.version>3.13.0</commons.bc.version>
     <commons.rc.version>RC1</commons.rc.version>
     <commons.release.isDistModule>true</commons.release.isDistModule>
     <commons.distSvnStagingUrl>scm:svn:https://dist.apache.org/repos/dist/dev/commons/lang</commons.distSvnStagingUrl>
@@ -668,37 +641,16 @@
   </properties>
 
   <build>
-   <defaultGoal>clean verify apache-rat:check checkstyle:check japicmp:cmp spotbugs:check javadoc:javadoc</defaultGoal>
+   <defaultGoal>clean verify apache-rat:check checkstyle:check japicmp:cmp spotbugs:check pmd:check javadoc:javadoc</defaultGoal>
    <pluginManagement>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${commons.pmd.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-core</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-java</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-javascript</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>net.sourceforge.pmd</groupId>
-              <artifactId>pmd-jsp</artifactId>
-              <version>${commons.pmd-impl.version}</version>
-            </dependency>
-          </dependencies>
           <configuration>
             <targetJdk>${maven.compiler.target}</targetJdk>
+            <excludeFromFailureFile>src/conf/exclude-pmd.properties</excludeFromFailureFile>
           </configuration>
         </plugin>
         <plugin>
@@ -751,7 +703,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>${commons.surefire.version}</version>
         <executions>
           <execution>
             <id>plain</id>
@@ -806,31 +757,15 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${checkstyle.configdir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
           <enableRulesSummary>false</enableRulesSummary>
         </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${checkstyle.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${commons.spotbugs.plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs</artifactId>
-            <version>${commons.spotbugs.impl.version}</version>
-         </dependency>
-        </dependencies>        
         <configuration>
           <excludeFilterFile>${basedir}/src/conf/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
@@ -863,7 +798,6 @@
       </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>${checkstyle.configdir}/checkstyle.xml</configLocation>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -881,7 +815,6 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>${commons.spotbugs.plugin.version}</version>
         <configuration>
           <excludeFilterFile>${basedir}/src/conf/spotbugs-exclude-filter.xml</excludeFilterFile>
         </configuration>
@@ -959,7 +892,7 @@
                   <goal>run</goal>
                 </goals>
                 <configuration>
-                  <tasks>
+                  <target>
                     <exec executable="svn">
                       <arg line="checkout --depth immediates ${commons.scmPubUrl} ${commons.scmPubCheckoutDirectory}" />
                     </exec>
@@ -974,7 +907,7 @@
                     <exec executable="svn">
                       <arg line="update --set-depth infinity ${dirs}" />
                     </exec>
-                  </tasks>
+                  </target>
                 </configuration>
               </execution>
             </executions>

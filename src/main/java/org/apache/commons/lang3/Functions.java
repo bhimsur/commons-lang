@@ -19,6 +19,7 @@ package org.apache.commons.lang3;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -32,6 +33,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.Streams.FailableStream;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.function.Failable;
 import org.apache.commons.lang3.function.FailableBooleanSupplier;
 
 /**
@@ -494,13 +497,11 @@ public class Functions {
     }
 
     /**
-     * <p>
      * Rethrows a {@link Throwable} as an unchecked exception. If the argument is already unchecked, namely a
      * {@link RuntimeException} or {@link Error} then the argument will be rethrown without modification. If the
      * exception is {@link IOException} then it will be wrapped into a {@link UncheckedIOException}. In every other
      * cases the exception will be wrapped into a {@code
      * UndeclaredThrowableException}
-     * </p>
      *
      * <p>
      * Note that there is a declared return type for this method, even though it never returns. The reason for that is
@@ -521,12 +522,7 @@ public class Functions {
      */
     public static RuntimeException rethrow(final Throwable throwable) {
         Objects.requireNonNull(throwable, "throwable");
-        if (throwable instanceof RuntimeException) {
-            throw (RuntimeException) throwable;
-        }
-        if (throwable instanceof Error) {
-            throw (Error) throwable;
-        }
+        ExceptionUtils.throwUnchecked(throwable);
         if (throwable instanceof IOException) {
             throw new UncheckedIOException((IOException) throwable);
         }
@@ -631,41 +627,9 @@ public class Functions {
     public static void tryWithResources(final FailableRunnable<? extends Throwable> action,
         final FailableConsumer<Throwable, ? extends Throwable> errorHandler,
         final FailableRunnable<? extends Throwable>... resources) {
-        final FailableConsumer<Throwable, ? extends Throwable> actualErrorHandler;
-        if (errorHandler == null) {
-            actualErrorHandler = Functions::rethrow;
-        } else {
-            actualErrorHandler = errorHandler;
-        }
-        if (resources != null) {
-            for (final FailableRunnable<? extends Throwable> failableRunnable : resources) {
-                Objects.requireNonNull(failableRunnable, "runnable");
-            }
-        }
-        Throwable th = null;
-        try {
-            action.run();
-        } catch (final Throwable t) {
-            th = t;
-        }
-        if (resources != null) {
-            for (final FailableRunnable<?> runnable : resources) {
-                try {
-                    runnable.run();
-                } catch (final Throwable t) {
-                    if (th == null) {
-                        th = t;
-                    }
-                }
-            }
-        }
-        if (th != null) {
-            try {
-                actualErrorHandler.accept(th);
-            } catch (final Throwable t) {
-                throw rethrow(t);
-            }
-        }
+        final org.apache.commons.lang3.function.FailableRunnable<?>[] fr = new org.apache.commons.lang3.function.FailableRunnable[resources.length];
+        Arrays.setAll(fr, i -> () -> resources[i].run());
+        Failable.tryWithResources(action::run, errorHandler != null ? errorHandler::accept : null, fr);
     }
 
     /**

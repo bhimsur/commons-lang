@@ -32,12 +32,13 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.LocaleUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
- * <p>FastDatePrinter is a fast and thread-safe version of
- * {@link java.text.SimpleDateFormat}.</p>
+ * FastDatePrinter is a fast and thread-safe version of
+ * {@link java.text.SimpleDateFormat}.
  *
  * <p>To obtain a FastDatePrinter, use {@link FastDateFormat#getInstance(String, TimeZone, Locale)}
  * or another variation of the factory methods of {@link FastDateFormat}.</p>
@@ -142,7 +143,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     // Constructor
     /**
-     * <p>Constructs a new FastDatePrinter.</p>
+     * Constructs a new FastDatePrinter.
      * Use {@link FastDateFormat#getInstance(String, TimeZone, Locale)}  or another variation of the
      * factory methods of {@link FastDateFormat} to get a cached FastDatePrinter instance.
      *
@@ -159,14 +160,14 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Initializes the instance for first use.</p>
+     * Initializes the instance for first use.
      */
     private void init() {
         final List<Rule> rulesList = parsePattern();
         rules = rulesList.toArray(EMPTY_RULE_ARRAY);
 
         int len = 0;
-        for (int i=rules.length; --i >= 0; ) {
+        for (int i = rules.length; --i >= 0;) {
             len += rules[i].estimateLength();
         }
 
@@ -175,7 +176,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     // Parse the pattern
     /**
-     * <p>Returns a list of Rules given a pattern.</p>
+     * Returns a list of Rules given a pattern.
      *
      * @return a {@link List} of Rule objects
      * @throws IllegalArgumentException if pattern is invalid
@@ -327,7 +328,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Performs the parsing of tokens.</p>
+     * Performs the parsing of tokens.
      *
      * @param pattern  the pattern
      * @param indexRef  index references
@@ -385,7 +386,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Gets an appropriate rule for the padding required.</p>
+     * Gets an appropriate rule for the padding required.
      *
      * @param field  the field to get a rule for
      * @param padding  the padding required
@@ -404,8 +405,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     // Format methods
     /**
-     * <p>Formats a {@link Date}, {@link Calendar} or
-     * {@link Long} (milliseconds) object.</p>
+     * Formats a {@link Date}, {@link Calendar} or
+     * {@link Long} (milliseconds) object.
      * @deprecated Use {{@link #format(Date)}, {{@link #format(Calendar)}, {{@link #format(long)}.
      * @param obj  the object to format
      * @param toAppendTo  the buffer to append to
@@ -424,13 +425,12 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         if (obj instanceof Long) {
             return format(((Long) obj).longValue(), toAppendTo);
         }
-        throw new IllegalArgumentException("Unknown class: " +
-            (obj == null ? "<null>" : obj.getClass().getName()));
+        throw new IllegalArgumentException("Unknown class: " + ClassUtils.getName(obj, "<null>"));
     }
 
     /**
-     * <p>Formats a {@link Date}, {@link Calendar} or
-     * {@link Long} (milliseconds) object.</p>
+     * Formats a {@link Date}, {@link Calendar} or
+     * {@link Long} (milliseconds) object.
      * @since 3.5
      * @param obj  the object to format
      * @return The formatted value.
@@ -445,8 +445,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         if (obj instanceof Long) {
             return format(((Long) obj).longValue());
         }
-        throw new IllegalArgumentException("Unknown class: " +
-            (obj == null ? "<null>" : obj.getClass().getName()));
+        throw new IllegalArgumentException("Unknown class: " + ClassUtils.getName(obj, "<null>"));
     }
 
     /* (non-Javadoc)
@@ -495,7 +494,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(long, java.lang.StringBuffer)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(long, StringBuffer)
      */
     @Override
     public StringBuffer format(final long millis, final StringBuffer buf) {
@@ -505,7 +504,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Date, java.lang.StringBuffer)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Date, StringBuffer)
      */
     @Override
     public StringBuffer format(final Date date, final StringBuffer buf) {
@@ -515,7 +514,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Calendar, java.lang.StringBuffer)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Calendar, StringBuffer)
      */
     @Override
     public StringBuffer format(final Calendar calendar, final StringBuffer buf) {
@@ -524,7 +523,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(long, java.lang.Appendable)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(long, Appendable)
      */
     @Override
     public <B extends Appendable> B format(final long millis, final B buf) {
@@ -534,7 +533,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Date, java.lang.Appendable)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Date, Appendable)
      */
     @Override
     public <B extends Appendable> B format(final Date date, final B buf) {
@@ -544,7 +543,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /* (non-Javadoc)
-     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Calendar, java.lang.Appendable)
+     * @see org.apache.commons.lang3.time.DatePrinter#format(java.util.Calendar, Appendable)
      */
     @Override
     public <B extends Appendable> B format(Calendar calendar, final B buf) {
@@ -572,8 +571,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Performs the formatting by applying the rules to the
-     * specified calendar.</p>
+     * Performs the formatting by applying the rules to the
+     * specified calendar.
      *
      * @param calendar  the calendar to format
      * @param buf  the buffer to format into
@@ -617,8 +616,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Gets an estimate for the maximum string length that the
-     * formatter will produce.</p>
+     * Gets an estimate for the maximum string length that the
+     * formatter will produce.
      *
      * <p>The actual formatted length will almost always be less than or
      * equal to this amount.</p>
@@ -631,7 +630,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     // Basics
     /**
-     * <p>Compares two objects for equality.</p>
+     * Compares two objects for equality.
      *
      * @param obj  the object to compare to
      * @return {@code true} if equal
@@ -648,7 +647,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Returns a hash code compatible with equals.</p>
+     * Returns a hash code compatible with equals.
      *
      * @return a hash code compatible with equals
      */
@@ -658,7 +657,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Gets a debugging string version of this formatter.</p>
+     * Gets a debugging string version of this formatter.
      *
      * @return a debugging string
      */
@@ -771,7 +770,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     // Rules
     /**
-     * <p>Inner class defining a rule.</p>
+     * Inner class defining a rule.
      */
     private interface Rule {
         /**
@@ -792,7 +791,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class defining a numeric rule.</p>
+     * Inner class defining a numeric rule.
      */
     private interface NumberRule extends Rule {
         /**
@@ -806,10 +805,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a constant single character.</p>
+     * Inner class to output a constant single character.
      */
     private static class CharacterLiteral implements Rule {
-        private final char mValue;
+        private final char value;
 
         /**
          * Constructs a new instance of {@link CharacterLiteral}
@@ -818,7 +817,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param value the character literal
          */
         CharacterLiteral(final char value) {
-            mValue = value;
+            this.value = value;
         }
 
         /**
@@ -834,15 +833,15 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            buffer.append(mValue);
+            buffer.append(value);
         }
     }
 
     /**
-     * <p>Inner class to output a constant string.</p>
+     * Inner class to output a constant string.
      */
     private static class StringLiteral implements Rule {
-        private final String mValue;
+        private final String value;
 
         /**
          * Constructs a new instance of {@link StringLiteral}
@@ -851,7 +850,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param value the string literal
          */
         StringLiteral(final String value) {
-            mValue = value;
+            this.value = value;
         }
 
         /**
@@ -859,7 +858,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public int estimateLength() {
-            return mValue.length();
+            return value.length();
         }
 
         /**
@@ -867,16 +866,16 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            buffer.append(mValue);
+            buffer.append(value);
         }
     }
 
     /**
-     * <p>Inner class to output one of a set of values.</p>
+     * Inner class to output one of a set of values.
      */
     private static class TextField implements Rule {
-        private final int mField;
-        private final String[] mValues;
+        private final int field;
+        private final String[] values;
 
         /**
          * Constructs an instance of {@link TextField}
@@ -886,8 +885,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param values the field values
          */
         TextField(final int field, final String[] values) {
-            mField = field;
-            mValues = values;
+            this.field = field;
+            this.values = values;
         }
 
         /**
@@ -896,8 +895,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         @Override
         public int estimateLength() {
             int max = 0;
-            for (int i=mValues.length; --i >= 0; ) {
-                final int len = mValues[i].length();
+            for (int i=values.length; --i >= 0; ) {
+                final int len = values[i].length();
                 if (len > max) {
                     max = len;
                 }
@@ -910,23 +909,23 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            buffer.append(mValues[calendar.get(mField)]);
+            buffer.append(values[calendar.get(field)]);
         }
     }
 
     /**
-     * <p>Inner class to output an unpadded number.</p>
+     * Inner class to output an unpadded number.
      */
     private static class UnpaddedNumberField implements NumberRule {
-        private final int mField;
+        private final int field;
 
         /**
-         * Constructs an instance of {@link UnpadedNumberField} with the specified field.
+         * Constructs an instance of {@link UnpaddedNumberField} with the specified field.
          *
          * @param field the field
          */
         UnpaddedNumberField(final int field) {
-            mField = field;
+            this.field = field;
         }
 
         /**
@@ -942,7 +941,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            appendTo(buffer, calendar.get(mField));
+            appendTo(buffer, calendar.get(field));
         }
 
         /**
@@ -961,7 +960,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output an unpadded month.</p>
+     * Inner class to output an unpadded month.
      */
     private static class UnpaddedMonthField implements NumberRule {
         static final UnpaddedMonthField INSTANCE = new UnpaddedMonthField();
@@ -1003,11 +1002,11 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a padded number.</p>
+     * Inner class to output a padded number.
      */
     private static class PaddedNumberField implements NumberRule {
-        private final int mField;
-        private final int mSize;
+        private final int field;
+        private final int size;
 
         /**
          * Constructs an instance of {@link PaddedNumberField}.
@@ -1020,8 +1019,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
                 // Should use UnpaddedNumberField or TwoDigitNumberField.
                 throw new IllegalArgumentException();
             }
-            mField = field;
-            mSize = size;
+            this.field = field;
+            this.size = size;
         }
 
         /**
@@ -1029,7 +1028,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public int estimateLength() {
-            return mSize;
+            return size;
         }
 
         /**
@@ -1037,7 +1036,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            appendTo(buffer, calendar.get(mField));
+            appendTo(buffer, calendar.get(field));
         }
 
         /**
@@ -1045,15 +1044,15 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public final void appendTo(final Appendable buffer, final int value) throws IOException {
-            appendFullDigits(buffer, value, mSize);
+            appendFullDigits(buffer, value, size);
         }
     }
 
     /**
-     * <p>Inner class to output a two digit number.</p>
+     * Inner class to output a two digit number.
      */
     private static class TwoDigitNumberField implements NumberRule {
-        private final int mField;
+        private final int field;
 
         /**
          * Constructs an instance of {@link TwoDigitNumberField} with the specified field.
@@ -1061,7 +1060,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param field the field
          */
         TwoDigitNumberField(final int field) {
-            mField = field;
+            this.field = field;
         }
 
         /**
@@ -1077,7 +1076,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            appendTo(buffer, calendar.get(mField));
+            appendTo(buffer, calendar.get(field));
         }
 
         /**
@@ -1094,7 +1093,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a two digit year.</p>
+     * Inner class to output a two digit year.
      */
     private static class TwoDigitYearField implements NumberRule {
         static final TwoDigitYearField INSTANCE = new TwoDigitYearField();
@@ -1131,7 +1130,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a two digit month.</p>
+     * Inner class to output a two digit month.
      */
     private static class TwoDigitMonthField implements NumberRule {
         static final TwoDigitMonthField INSTANCE = new TwoDigitMonthField();
@@ -1168,10 +1167,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output the twelve hour field.</p>
+     * Inner class to output the twelve hour field.
      */
     private static class TwelveHourField implements NumberRule {
-        private final NumberRule mRule;
+        private final NumberRule rule;
 
         /**
          * Constructs an instance of {@link TwelveHourField} with the specified
@@ -1180,7 +1179,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param rule the rule
          */
         TwelveHourField(final NumberRule rule) {
-            mRule = rule;
+            this.rule = rule;
         }
 
         /**
@@ -1188,7 +1187,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public int estimateLength() {
-            return mRule.estimateLength();
+            return rule.estimateLength();
         }
 
         /**
@@ -1200,7 +1199,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             if (value == 0) {
                 value = calendar.getLeastMaximum(Calendar.HOUR) + 1;
             }
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
 
         /**
@@ -1208,15 +1207,15 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final int value) throws IOException {
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
     }
 
     /**
-     * <p>Inner class to output the twenty four hour field.</p>
+     * Inner class to output the twenty four hour field.
      */
     private static class TwentyFourHourField implements NumberRule {
-        private final NumberRule mRule;
+        private final NumberRule rule;
 
         /**
          * Constructs an instance of {@link TwentyFourHourField} with the specified
@@ -1225,7 +1224,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param rule the rule
          */
         TwentyFourHourField(final NumberRule rule) {
-            mRule = rule;
+            this.rule = rule;
         }
 
         /**
@@ -1233,7 +1232,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public int estimateLength() {
-            return mRule.estimateLength();
+            return rule.estimateLength();
         }
 
         /**
@@ -1245,7 +1244,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             if (value == 0) {
                 value = calendar.getMaximum(Calendar.HOUR_OF_DAY) + 1;
             }
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
 
         /**
@@ -1253,60 +1252,60 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public void appendTo(final Appendable buffer, final int value) throws IOException {
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
     }
 
     /**
-     * <p>Inner class to output the numeric day in week.</p>
+     * Inner class to output the numeric day in week.
      */
     private static class DayInWeekField implements NumberRule {
-        private final NumberRule mRule;
+        private final NumberRule rule;
 
         DayInWeekField(final NumberRule rule) {
-            mRule = rule;
+            this.rule = rule;
         }
 
         @Override
         public int estimateLength() {
-            return mRule.estimateLength();
+            return rule.estimateLength();
         }
 
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
             final int value = calendar.get(Calendar.DAY_OF_WEEK);
-            mRule.appendTo(buffer, value == Calendar.SUNDAY ? 7 : value - 1);
+            rule.appendTo(buffer, value == Calendar.SUNDAY ? 7 : value - 1);
         }
 
         @Override
         public void appendTo(final Appendable buffer, final int value) throws IOException {
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
     }
 
     /**
-     * <p>Inner class to output the numeric day in week.</p>
+     * Inner class to output the numeric day in week.
      */
     private static class WeekYear implements NumberRule {
-        private final NumberRule mRule;
+        private final NumberRule rule;
 
         WeekYear(final NumberRule rule) {
-            mRule = rule;
+            this.rule = rule;
         }
 
         @Override
         public int estimateLength() {
-            return mRule.estimateLength();
+            return rule.estimateLength();
         }
 
         @Override
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
-            mRule.appendTo(buffer, calendar.getWeekYear());
+            rule.appendTo(buffer, calendar.getWeekYear());
         }
 
         @Override
         public void appendTo(final Appendable buffer, final int value) throws IOException {
-            mRule.appendTo(buffer, value);
+            rule.appendTo(buffer, value);
         }
     }
 
@@ -1315,7 +1314,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         new ConcurrentHashMap<>(7);
 
     /**
-     * <p>Gets the time zone display name, using a cache for performance.</p>
+     * Gets the time zone display name, using a cache for performance.
      *
      * @param tz  the zone to query
      * @param daylight  true if daylight savings
@@ -1330,13 +1329,13 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a time zone name.</p>
+     * Inner class to output a time zone name.
      */
     private static class TimeZoneNameRule implements Rule {
-        private final Locale mLocale;
-        private final int mStyle;
-        private final String mStandard;
-        private final String mDaylight;
+        private final Locale locale;
+        private final int style;
+        private final String standard;
+        private final String daylight;
 
         /**
          * Constructs an instance of {@link TimeZoneNameRule} with the specified properties.
@@ -1346,11 +1345,10 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param style the style
          */
         TimeZoneNameRule(final TimeZone timeZone, final Locale locale, final int style) {
-            mLocale = LocaleUtils.toLocale(locale);
-            mStyle = style;
-
-            mStandard = getTimeZoneDisplay(timeZone, false, style, locale);
-            mDaylight = getTimeZoneDisplay(timeZone, true, style, locale);
+            this.locale = LocaleUtils.toLocale(locale);
+            this.style = style;
+            this.standard = getTimeZoneDisplay(timeZone, false, style, locale);
+            this.daylight = getTimeZoneDisplay(timeZone, true, style, locale);
         }
 
         /**
@@ -1361,7 +1359,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             // We have no access to the Calendar object that will be passed to
             // appendTo so base estimate on the TimeZone passed to the
             // constructor
-            return Math.max(mStandard.length(), mDaylight.length());
+            return Math.max(standard.length(), daylight.length());
         }
 
         /**
@@ -1371,22 +1369,22 @@ public class FastDatePrinter implements DatePrinter, Serializable {
         public void appendTo(final Appendable buffer, final Calendar calendar) throws IOException {
             final TimeZone zone = calendar.getTimeZone();
             if (calendar.get(Calendar.DST_OFFSET) == 0) {
-                buffer.append(getTimeZoneDisplay(zone, false, mStyle, mLocale));
+                buffer.append(getTimeZoneDisplay(zone, false, style, locale));
             } else {
-                buffer.append(getTimeZoneDisplay(zone, true, mStyle, mLocale));
+                buffer.append(getTimeZoneDisplay(zone, true, style, locale));
             }
         }
     }
 
     /**
-     * <p>Inner class to output a time zone as a number {@code +/-HHMM}
-     * or {@code +/-HH:MM}.</p>
+     * Inner class to output a time zone as a number {@code +/-HHMM}
+     * or {@code +/-HH:MM}.
      */
     private static class TimeZoneNumberRule implements Rule {
         static final TimeZoneNumberRule INSTANCE_COLON = new TimeZoneNumberRule(true);
         static final TimeZoneNumberRule INSTANCE_NO_COLON = new TimeZoneNumberRule(false);
 
-        final boolean mColon;
+        private final boolean colon;
 
         /**
          * Constructs an instance of {@link TimeZoneNumberRule} with the specified properties.
@@ -1394,7 +1392,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          * @param colon add colon between HH and MM in the output if {@code true}
          */
         TimeZoneNumberRule(final boolean colon) {
-            mColon = colon;
+            this.colon = colon;
         }
 
         /**
@@ -1423,7 +1421,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             final int hours = offset / (60 * 60 * 1000);
             appendDigits(buffer, hours);
 
-            if (mColon) {
+            if (colon) {
                 buffer.append(':');
             }
 
@@ -1433,8 +1431,8 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class to output a time zone as a number {@code +/-HHMM}
-     * or {@code +/-HH:MM}.</p>
+     * Inner class to output a time zone as a number {@code +/-HHMM}
+     * or {@code +/-HH:MM}.
      */
     private static class Iso8601_Rule implements Rule {
 
@@ -1465,7 +1463,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             }
         }
 
-        final int length;
+        private final int length;
 
         /**
          * Constructs an instance of {@code Iso8601_Rule} with the specified properties.
@@ -1519,12 +1517,12 @@ public class FastDatePrinter implements DatePrinter, Serializable {
     }
 
     /**
-     * <p>Inner class that acts as a compound key for time zone names.</p>
+     * Inner class that acts as a compound key for time zone names.
      */
     private static class TimeZoneDisplayKey {
-        private final TimeZone mTimeZone;
-        private final int mStyle;
-        private final Locale mLocale;
+        private final TimeZone timeZone;
+        private final int style;
+        private final Locale locale;
 
         /**
          * Constructs an instance of {@link TimeZoneDisplayKey} with the specified properties.
@@ -1536,13 +1534,13 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         TimeZoneDisplayKey(final TimeZone timeZone,
                            final boolean daylight, final int style, final Locale locale) {
-            mTimeZone = timeZone;
+            this.timeZone = timeZone;
             if (daylight) {
-                mStyle = style | 0x80000000;
+                this.style = style | 0x80000000;
             } else {
-                mStyle = style;
+                this.style = style;
             }
-            mLocale = LocaleUtils.toLocale(locale);
+            this.locale = LocaleUtils.toLocale(locale);
         }
 
         /**
@@ -1550,7 +1548,7 @@ public class FastDatePrinter implements DatePrinter, Serializable {
          */
         @Override
         public int hashCode() {
-            return (mStyle * 31 + mLocale.hashCode() ) * 31 + mTimeZone.hashCode();
+            return (style * 31 + locale.hashCode() ) * 31 + timeZone.hashCode();
         }
 
         /**
@@ -1564,9 +1562,9 @@ public class FastDatePrinter implements DatePrinter, Serializable {
             if (obj instanceof TimeZoneDisplayKey) {
                 final TimeZoneDisplayKey other = (TimeZoneDisplayKey) obj;
                 return
-                    mTimeZone.equals(other.mTimeZone) &&
-                    mStyle == other.mStyle &&
-                    mLocale.equals(other.mLocale);
+                    timeZone.equals(other.timeZone) &&
+                    style == other.style &&
+                    locale.equals(other.locale);
             }
             return false;
         }

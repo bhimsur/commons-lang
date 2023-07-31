@@ -19,9 +19,10 @@ package org.apache.commons.lang3;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
- * <p>A contiguous range of characters, optionally negated.</p>
+ * A contiguous range of characters, optionally negated.
  *
  * <p>Instances are immutable.</p>
  *
@@ -41,8 +42,10 @@ final class CharRange implements Iterable<Character>, Serializable {
 
     /** The first character, inclusive, in the range. */
     private final char start;
+
     /** The last character, inclusive, in the range. */
     private final char end;
+
     /** True if the range is everything except the characters specified. */
     private final boolean negated;
 
@@ -53,8 +56,8 @@ final class CharRange implements Iterable<Character>, Serializable {
     static final CharRange[] EMPTY_ARRAY = {};
 
     /**
-     * <p>Constructs a {@link CharRange} over a set of characters,
-     * optionally negating the range.</p>
+     * Constructs a {@link CharRange} over a set of characters,
+     * optionally negating the range.
      *
      * <p>A negated range includes everything except that defined by the
      * start and end characters.</p>
@@ -79,7 +82,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Constructs a {@link CharRange} over a single character.</p>
+     * Constructs a {@link CharRange} over a single character.
      *
      * @param ch  only character in this range
      * @return the new CharRange object
@@ -90,7 +93,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Constructs a negated {@link CharRange} over a single character.</p>
+     * Constructs a negated {@link CharRange} over a single character.
      *
      * <p>A negated range includes everything except that defined by the
      * single character.</p>
@@ -104,7 +107,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Constructs a {@link CharRange} over a set of characters.</p>
+     * Constructs a {@link CharRange} over a set of characters.
      *
      * <p>If start and end are in the wrong order, they are reversed.
      * Thus {@code a-e} is the same as {@code e-a}.</p>
@@ -119,7 +122,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Constructs a negated {@link CharRange} over a set of characters.</p>
+     * Constructs a negated {@link CharRange} over a set of characters.
      *
      * <p>A negated range includes everything except that defined by the
      * start and end characters.</p>
@@ -138,7 +141,7 @@ final class CharRange implements Iterable<Character>, Serializable {
 
     // Accessors
     /**
-     * <p>Gets the start character for this character range.</p>
+     * Gets the start character for this character range.
      *
      * @return the start char (inclusive)
      */
@@ -147,7 +150,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Gets the end character for this character range.</p>
+     * Gets the end character for this character range.
      *
      * @return the end char (inclusive)
      */
@@ -156,7 +159,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Is this {@link CharRange} negated.</p>
+     * Is this {@link CharRange} negated.
      *
      * <p>A negated range includes everything except that defined by the
      * start and end characters.</p>
@@ -169,7 +172,7 @@ final class CharRange implements Iterable<Character>, Serializable {
 
     // Contains
     /**
-     * <p>Is the character specified contained in this range.</p>
+     * Is the character specified contained in this range.
      *
      * @param ch  the character to check
      * @return {@code true} if this range contains the input character
@@ -179,15 +182,15 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Are all the characters of the passed in range contained in
-     * this range.</p>
+     * Are all the characters of the passed in range contained in
+     * this range.
      *
      * @param range  the range to check against
      * @return {@code true} if this range entirely contains the input range
      * @throws NullPointerException if {@code null} input
      */
     public boolean contains(final CharRange range) {
-        Validate.notNull(range, "range");
+        Objects.requireNonNull(range, "range");
         if (negated) {
             if (range.negated) {
                 return start >= range.start && end <= range.end;
@@ -202,8 +205,8 @@ final class CharRange implements Iterable<Character>, Serializable {
 
     // Basics
     /**
-     * <p>Compares two CharRange objects, returning true if they represent
-     * exactly the same range of characters defined in the same way.</p>
+     * Compares two CharRange objects, returning true if they represent
+     * exactly the same range of characters defined in the same way.
      *
      * @param obj  the object to compare to
      * @return true if equal
@@ -221,7 +224,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Gets a hashCode compatible with the equals method.</p>
+     * Gets a hashCode compatible with the equals method.
      *
      * @return a suitable hashCode
      */
@@ -231,7 +234,7 @@ final class CharRange implements Iterable<Character>, Serializable {
     }
 
     /**
-     * <p>Gets a string representation of the character range.</p>
+     * Gets a string representation of the character range.
      *
      * @return string representation of this range
      */
@@ -252,9 +255,8 @@ final class CharRange implements Iterable<Character>, Serializable {
         return iToString;
     }
 
-    // Expansions
     /**
-     * <p>Returns an iterator which can be used to walk through the characters described by this range.</p>
+     * Returns an iterator which can be used to walk through the characters described by this range.
      *
      * <p>#NotThreadSafe# the iterator is not thread-safe</p>
      * @return an iterator to the chars represented by this range

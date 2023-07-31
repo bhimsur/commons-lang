@@ -21,14 +21,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Objects;
 import java.util.TimeZone;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>Duration formatting utilities and constants. The following table describes the tokens
- * used in the pattern language for formatting.</p>
+ * Duration formatting utilities and constants. The following table describes the tokens
+ * used in the pattern language for formatting.
  * <table border="1">
  *  <caption>Pattern Tokens</caption>
  *  <tr><th>character</th><th>duration element</th></tr>
@@ -52,7 +54,7 @@ import org.apache.commons.lang3.Validate;
 public class DurationFormatUtils {
 
     /**
-     * <p>DurationFormatUtils instances should NOT be constructed in standard programming.</p>
+     * DurationFormatUtils instances should NOT be constructed in standard programming.
      *
      * <p>This constructor is public to permit tools that require a JavaBean instance
      * to operate.</p>
@@ -61,8 +63,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Pattern used with {@link FastDateFormat} and {@link SimpleDateFormat}
-     * for the ISO 8601 period format used in durations.</p>
+     * Pattern used with {@link FastDateFormat} and {@link SimpleDateFormat}
+     * for the ISO 8601 period format used in durations.
      *
      * @see org.apache.commons.lang3.time.FastDateFormat
      * @see java.text.SimpleDateFormat
@@ -70,7 +72,7 @@ public class DurationFormatUtils {
     public static final String ISO_EXTENDED_FORMAT_PATTERN = "'P'yyyy'Y'M'M'd'DT'H'H'm'M's.SSS'S'";
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is ISO 8601-like: {@code HH:mm:ss.SSS}.</p>
      *
@@ -83,7 +85,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is the ISO 8601 period format.</p>
      *
@@ -99,7 +101,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format, and padding with zeros.</p>
+     * Formats the time gap as a string, using the specified format, and padding with zeros.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -114,8 +116,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format.
-     * Padding the left-hand side of numbers with zeroes is optional.</p>
+     * Formats the time gap as a string, using the specified format.
+     * Padding the left-hand side of numbers with zeroes is optional.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -158,7 +160,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats an elapsed time into a pluralization correct string.</p>
+     * Formats an elapsed time into a pluralization correct string.
      *
      * <p>This method formats durations using the days and lower fields of the
      * format pattern. Months and larger are not used.</p>
@@ -189,9 +191,6 @@ public class DurationFormatUtils {
                     duration = tmp;
                     tmp = StringUtils.replaceOnce(duration, " 0 minutes", StringUtils.EMPTY);
                     duration = tmp;
-                    if (tmp.length() != duration.length()) {
-                        duration = StringUtils.replaceOnce(tmp, " 0 seconds", StringUtils.EMPTY);
-                    }
                 }
             }
             if (!duration.isEmpty()) {
@@ -223,7 +222,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string.</p>
+     * Formats the time gap as a string.
      *
      * <p>The format used is the ISO 8601 period format.</p>
      *
@@ -237,7 +236,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Formats the time gap as a string, using the specified format.
+     * Formats the time gap as a string, using the specified format.
      * Padding the left-hand side of numbers with zeroes is optional.
      *
      * @param startMillis  the start of the duration
@@ -253,7 +252,7 @@ public class DurationFormatUtils {
     /**
      * <p>Formats the time gap as a string, using the specified format.
      * Padding the left-hand side of numbers with zeroes is optional and
-     * the time zone may be specified. </p>
+     * the time zone may be specified.
      *
      * <p>When calculating the difference between months/days, it chooses to
      * calculate months first. So when working out the number of months and
@@ -261,9 +260,9 @@ public class DurationFormatUtils {
      * 23 days gained by choosing January-&gt;February = 1 month and then
      * calculating days forwards, and not the 1 month and 26 days gained by
      * choosing March -&gt; February = 1 month and then calculating days
-     * backwards. </p>
+     * backwards.</p>
      *
-     * <p>For more control, the <a href="http://joda-time.sf.net/">Joda-Time</a>
+     * <p>For more control, the <a href="https://www.joda.org/joda-time/">Joda-Time</a>
      * library is recommended.</p>
      *
      * @param startMillis  the start of the duration
@@ -407,7 +406,7 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>The internal method to do the formatting.</p>
+     * The internal method to do the formatting.
      *
      * @param tokens  the tokens
      * @param years  the number of years
@@ -462,8 +461,8 @@ public class DurationFormatUtils {
     }
 
     /**
-     * <p>Converts a {@code long} to a {@link String} with optional
-     * zero padding.</p>
+     * Converts a {@code long} to a {@link String} with optional
+     * zero padding.
      *
      * @param value the value to convert
      * @param padWithZeros whether to pad with zeroes
@@ -578,12 +577,7 @@ public class DurationFormatUtils {
          * @return boolean {@code true} if contained
          */
         static boolean containsTokenWithValue(final Token[] tokens, final Object value) {
-            for (final Token token : tokens) {
-                if (token.getValue() == value) {
-                    return true;
-                }
-            }
-            return false;
+            return Stream.of(tokens).anyMatch(token -> token.getValue() == value);
         }
 
         private final Object value;
@@ -592,22 +586,21 @@ public class DurationFormatUtils {
         /**
          * Wraps a token around a value. A value would be something like a 'Y'.
          *
-         * @param value to wrap
+         * @param value to wrap, non-null.
          */
         Token(final Object value) {
-            this.value = value;
-            this.count = 1;
+            this(value, 1);
         }
 
         /**
          * Wraps a token around a repeated number of a value, for example it would
          * store 'yyyy' as a value for y and a count of 4.
          *
-         * @param value to wrap
-         * @param count to wrap
+         * @param value to wrap, non-null.
+         * @param count to wrap.
          */
         Token(final Object value, final int count) {
-            this.value = value;
+            this.value = Objects.requireNonNull(value, "value");
             this.count = count;
         }
 
@@ -630,7 +623,7 @@ public class DurationFormatUtils {
         /**
          * Gets the particular value this token represents.
          *
-         * @return Object value
+         * @return Object value, non-null.
          */
         Object getValue() {
             return value;

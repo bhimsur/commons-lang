@@ -16,9 +16,8 @@
  */
 package org.apache.commons.lang3.text;
 
-import static java.util.FormattableFlags.LEFT_JUSTIFY;
-
 import java.util.Formattable;
+import java.util.FormattableFlags;
 import java.util.Formatter;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -26,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 /**
- * <p>Provides utilities for working with the {@link Formattable} interface.</p>
+ * Provides utilities for working with the {@link Formattable} interface.
  *
  * <p>The {@link Formattable} interface provides basic control over formatting
  * when using a {@link Formatter}. It is primarily concerned with numeric precision
@@ -46,9 +45,9 @@ public class FormattableUtils {
     private static final String SIMPLEST_FORMAT = "%s";
 
     /**
-     * <p>{@link FormattableUtils} instances should NOT be constructed in
+     * {@link FormattableUtils} instances should NOT be constructed in
      * standard programming. Instead, the methods of the class should be invoked
-     * statically.</p>
+     * statically.
      *
      * <p>This constructor is public to permit tools that require a JavaBean
      * instance to operate.</p>
@@ -141,7 +140,7 @@ public class FormattableUtils {
             final CharSequence actualEllipsis = ObjectUtils.defaultIfNull(ellipsis, StringUtils.EMPTY);
             buf.replace(precision - actualEllipsis.length(), seq.length(), actualEllipsis.toString());
         }
-        final boolean leftJustify = (flags & LEFT_JUSTIFY) == LEFT_JUSTIFY;
+        final boolean leftJustify = (flags & FormattableFlags.LEFT_JUSTIFY) == FormattableFlags.LEFT_JUSTIFY;
         for (int i = buf.length(); i < width; i++) {
             buf.insert(leftJustify ? i : 0, padChar);
         }

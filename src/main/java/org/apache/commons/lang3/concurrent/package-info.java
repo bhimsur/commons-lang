@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 /**
- * <p>
  * Provides support classes for multi-threaded programming. This package is intended to be an extension to
  * {@link java.util.concurrent}. These classes are thread-safe.
- * </p>
  *
  * <p>
  * A group of classes deals with the correct creation and initialization of objects that are accessed by multiple
@@ -140,7 +138,7 @@
  * </p>
  *
  * <p>
- * Now, which one of the lazy initializer implementations should you use? First of all we have to state that is is
+ * Now, which one of the lazy initializer implementations should you use? First of all we have to state that is
  * problematic to give general recommendations regarding the performance of these classes. The initializers make use of
  * low-level functionality whose efficiency depends on multiple factors including the target platform and the number of
  * concurrent threads. So developers should make their own benchmarks in scenarios close to their specific use cases.
@@ -409,7 +407,7 @@
  * The nested {@link org.apache.commons.lang3.concurrent.BasicThreadFactory.Builder} class defines some methods for
  * configuring the new {@link org.apache.commons.lang3.concurrent.BasicThreadFactory} instance. Objects of this class
  * are immutable, so these attributes cannot be changed later. The naming pattern is a string which can be passed to
- * {@link java.lang.String#format(java.util.Locale, String, Object...)}. The placeholder <em>%d</em> is replaced by an
+ * {@link String#format(java.util.Locale, String, Object...)}. The placeholder <em>%d</em> is replaced by an
  * increasing counter value. An instance can wrap another {@link java.util.concurrent.ThreadFactory} implementation;
  * this is achieved by calling the builder's
  * {@link org.apache.commons.lang3.concurrent.BasicThreadFactory.Builder#wrappedFactory(java.util.concurrent.ThreadFactory)

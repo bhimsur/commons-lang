@@ -20,12 +20,11 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * <p>An immutable pair consisting of two {@link Object} elements.</p>
+ * An immutable pair consisting of two {@link Object} elements.
  *
  * <p>Although the implementation is immutable, there is no restriction on the objects
  * that may be stored. If mutable objects are stored in the pair, then the pair
- * itself effectively becomes mutable. The class is also {@code final}, so a subclass
- * can not add undesirable behavior.</p>
+ * itself effectively becomes mutable.</p>
  *
  * <p>#ThreadSafe# if both paired objects are thread-safe</p>
  *
@@ -71,7 +70,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     }
 
     /**
-     * <p>Creates an immutable pair of two objects inferring the generic types.</p>
+     * Creates an immutable pair of two objects inferring the generic types.
      *
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
@@ -94,12 +93,13 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
      * @return an immutable pair of nulls.
      * @since 3.6
      */
+    @SuppressWarnings("unchecked")
     public static <L, R> ImmutablePair<L, R> nullPair() {
         return NULL;
     }
 
     /**
-     * <p>Creates an immutable pair of two objects inferring the generic types.</p>
+     * Creates an immutable pair of two objects inferring the generic types.
      *
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
@@ -115,7 +115,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     }
 
     /**
-     * <p>Creates an immutable pair from a map entry.</p>
+     * Creates an immutable pair from a map entry.
      *
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
@@ -131,7 +131,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     }
 
     /**
-     * <p>Creates an immutable pair of two non-null objects inferring the generic types.</p>
+     * Creates an immutable pair of two non-null objects inferring the generic types.
      *
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
@@ -149,7 +149,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     }
 
     /**
-     * <p>Creates an immutable pair of two objects inferring the generic types.</p>
+     * Creates an immutable pair of two objects inferring the generic types.
      *
      * <p>This factory allows the pair to be created using inference to
      * obtain the generic types.</p>
@@ -198,7 +198,7 @@ public class ImmutablePair<L, R> extends Pair<L, R> {
     }
 
     /**
-     * <p>Throws {@link UnsupportedOperationException}.</p>
+     * Throws {@link UnsupportedOperationException}.
      *
      * <p>This pair is immutable, so this operation is not supported.</p>
      *
